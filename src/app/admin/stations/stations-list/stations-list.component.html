@@ -1,0 +1,55 @@
+<div class="pt-6">
+  <p-card class="shadow-2xl">
+    <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
+      <h1 class="text-2xl font-bold">Stations</h1>
+      <p-button
+        routerLink="/stations/create"
+        label="Add new Station"
+        icon="pi pi-plus"
+        styleClass="p-button-primary"
+      ></p-button>
+    </div>
+    <p-table
+      [value]="stations"
+      [styleClass]="'p-datatable-sm'"
+      stripedRows
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 25]"
+    >
+      <ng-template #header>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Abbreviation</th>
+          <th>Location</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-station>
+        <tr>
+          <td class="pt-0 pb-0">{{ station.id }}</td>
+          <td class="pt-0 pb-0">{{ station.name }}</td>
+          <td class="pt-0 pb-0">{{ station.abbreviation }}</td>
+          <td class="pt-0 pb-0">({{ station.location.latitude }}, {{station.location.longitude}})</td>
+          <td class="pt-0 pb-0">
+            <div class="flex items-center justify-center gap-2">
+              <button
+                pTooltip="Edit Holiday"
+                tooltipPosition="top"
+                pRipple
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                [routerLink]="['../stations', station.id]"
+                text
+                rounded
+                severity="contrast"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

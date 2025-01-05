@@ -1,0 +1,11 @@
+<div class="pt-2">
+  <p-card>
+    <p-timeline [value]="timelinePoints" layout="horizontal" align="top">
+      <ng-template pTemplate="content" let-point>
+        <div>
+          <span>{{ point.time }} <span class="text-red-800">+{{ point.delayInMinutes }}</span></span>
+        </div>
+      </ng-template>
+    </p-timeline>
+  </p-card>
+</div>

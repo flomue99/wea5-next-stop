@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@layer tailwind-base, primeng, tailwind-utilities;
+@layer tailwind-base {
+  @tailwind base;
+}
+@layer primeng;
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+.p-button.p-button-primary {
+  @apply px-2.5 pb-2.5 pt-2.5 rounded;
+  @apply transition duration-150 ease-in-out;
+  @apply motion-reduce:transition-none;
+  @apply bg-emerald-500 border-emerald-500 text-white shadow-lg text-xs font-bold uppercase;
+  @apply hover:bg-emerald-600 hover:border-emerald-600 hover:shadow-md;
+  @apply focus:bg-emerald-600 focus:border-emerald-600 focus:shadow-md focus:outline-none focus:ring-0;
+  @apply active:bg-emerald-700 active:border-emerald-700 active:shadow-md;
+}
+
+.p-button.p-button-secondary {
+  @apply px-2.5 pb-2.5 pt-2.5 rounded;
+  @apply transition duration-150 ease-in-out;
+  @apply motion-reduce:transition-none;
+  @apply bg-emerald-100 border-emerald-100 text-emerald-700 text-xs font-bold uppercase;
+  @apply hover:bg-emerald-200 hover:border-emerald-200;
+  @apply focus:bg-emerald-200 focus:border-emerald-200 focus:outline-none focus:ring-0;
+  @apply active:bg-emerald-200 active:border-emerald-200;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}

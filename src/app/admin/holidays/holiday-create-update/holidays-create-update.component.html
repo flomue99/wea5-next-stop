@@ -1,0 +1,90 @@
+<div class="pt-6  w-1/2">
+  <p-card class="shadow-2xl">
+    <form [formGroup]="holidayForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
+        @if (isUpdatingHoliday) {
+          <h1 class="text-2xl font-bold">Update Holiday with ID: {{ id }}</h1>
+        } @else {
+          <h1 class="text-2xl font-bold">Create Holiday</h1>
+        }
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+        <div class="space-y-4 md:col-span-2">
+          <div class="grid grid-cols-2 gap-3">
+            <div class="relative">
+              <p-floatlabel class="w-full" variant="on">
+                <input [class]="'w-full'" formControlName="name" pInputText id="name_label" autocomplete="off"/>
+                <label for="name_label">Holiday Name</label>
+              </p-floatlabel>
+            </div>
+
+            <div class="relative">
+              <p-floatlabel class="w-full" variant="on">
+                <p-select inputId="type_label" formControlName="type" [options]="types" optionLabel="name"
+                          styleClass="w-full"/>
+                <label for="type_label">Holiday Type</label>
+              </p-floatlabel>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="relative">
+              <p-float-label variant="on" class="w-full">
+                <p-datepicker
+                  formControlName="fromDate"
+                  [showIcon]="true"
+                  inputId="fromDateLabel"
+                  styleClass="w-full"
+                  [inputStyleClass]="'w-full'"
+                ></p-datepicker>
+                <label for="fromDateLabel" class="text-gray-600">From Date</label>
+              </p-float-label>
+            </div>
+
+            <div class="relative">
+              <p-float-label variant="on" class="w-full">
+                <p-datepicker
+                  formControlName="toDate"
+                  [showIcon]="true"
+                  inputId="toDate"
+                  styleClass="w-full"
+                  [inputStyleClass]="'w-full'"
+                >
+                </p-datepicker>
+                <label for="toDate" class="text-gray-600">
+                  To Date
+                </label>
+              </p-float-label>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
+        <p-button
+          routerLink="/holidays"
+          label="Cancel"
+          icon="pi pi-times"
+          styleClass="p-button-secondary"
+        ></p-button>
+        @if (isUpdatingHoliday) {
+          <p-button
+            label="Update Holiday"
+            type="submit"
+            icon="pi pi-save"
+            styleClass="p-button-primary"
+          ></p-button>
+        } @else {
+          <p-button
+            label="Create Holiday"
+            type="submit"
+            icon="pi pi-save"
+            styleClass="p-button-primary"
+          ></p-button>
+        }
+      </div>
+    </form>
+  </p-card>
+</div>
+

@@ -1,0 +1,167 @@
+<p-card class="shadow-2xl">
+  <form [formGroup]="filterFormGroup" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="border-b border-gray-200 pb-2">
+      <h1 class="text-2xl font-bold">Find Your Connection</h1>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="space-y-4 md:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="relative">
+            <p-float-label variant="on" class="w-full">
+              <p-auto-complete
+                class="ng-invalid ng-dirty"
+                formControlName="fromStation"
+                [suggestions]="stations"
+                (completeMethod)="filterStation($event)"
+                inputId="fromStation"
+                optionLabel="name"
+                [dropdown]="true"
+                styleClass="w-full"
+              >
+                <ng-template let-station #item>
+                  <div class="flex flex-col">
+                    <span class="font-medium">{{ station.name }}</span>
+                    <span class="text-sm text-gray-600">{{ station.abbreviation }}</span>
+                  </div>
+                </ng-template>
+              </p-auto-complete>
+              <label for="fromStation" class="text-gray-600">From Station</label>
+            </p-float-label>
+            <p-message
+              *ngIf="filterFormGroup.get('fromStation')?.errors?.['required'] && (filterFormGroup.get('fromStation')?.dirty || filterFormGroup.get('fromStation')?.touched || submitted)"
+              severity="error"
+              text="From StationWithDistance is required."
+            ></p-message>
+          </div>
+
+          <div class="relative">
+            <p-float-label variant="on" class="w-full">
+              <p-auto-complete
+                formControlName="toStation"
+                [suggestions]="stations"
+                (completeMethod)="filterStation($event)"
+                inputId="toStation"
+                optionLabel="name"
+                [dropdown]="true"
+                styleClass="w-full"
+                [inputStyleClass]="'w-full'"
+              >
+                <ng-template let-station #item>
+                  <div class="flex flex-col">
+                    <span class="font-medium">{{ station.name }}</span>
+                    <span class="text-sm text-gray-600">{{ station.abbreviation }}</span>
+                  </div>
+                </ng-template>
+              </p-auto-complete>
+              <label for="toStation" class="text-gray-600">To Station</label>
+            </p-float-label>
+            <p-message
+              *ngIf="filterFormGroup.get('toStation')?.errors?.['required'] && (filterFormGroup.get('toStation')?.dirty || filterFormGroup.get('toStation')?.touched || submitted)"
+              severity="error"
+              text="To StationWithDistance is required."
+            ></p-message>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="relative">
+          <p-float-label variant="on" class="w-full">
+            <p-date-picker
+              formControlName="date"
+              [showIcon]="true"
+              inputId="date"
+              styleClass="w-full"
+              [inputStyleClass]="'w-full'"
+            ></p-date-picker>
+            <label for="date" class="text-gray-600">Travel Date</label>
+          </p-float-label>
+        </div>
+
+        <div class="relative">
+          <p-float-label variant="on" class="w-full">
+            <p-date-picker
+              formControlName="time"
+              [timeOnly]="true"
+              [showIcon]="true"
+              inputId="time"
+              styleClass="w-full"
+              [inputStyleClass]="'w-full'"
+            >
+              <ng-template pTemplate="inputicon">
+                <i class="pi pi-clock"></i>
+              </ng-template>
+            </p-date-picker>
+            <label for="time" class="text-gray-600">
+              {{ filterFormGroup.get('isArrivalTime')!.value ? 'Arrival' : 'Departure' }} Time
+            </label>
+          </p-float-label>
+          <p-message
+            *ngIf="filterFormGroup.get('time')?.errors?.['time'] && (filterFormGroup.get('time')?.dirty || filterFormGroup.get('time')?.touched || submitted)"
+            severity="error"
+            text="{{ filterFormGroup.get('isArrivalTime')!.value ? 'Arrival' : 'Departure' }} Time is required."
+          ></p-message>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="relative">
+          <p-float-label class="w-full">
+            <p-select-button
+              allowEmpty="false"
+              [class]="'w-full'"
+              [options]="stateOptions"
+              formControlName="isArrivalTime"
+              optionValue="value"
+              optionLabel="label"
+              styleClass="w-full"
+            ></p-select-button>
+          </p-float-label>
+        </div>
+
+        <div class="relative">
+          <p-float-label variant="on" class="w-full">
+            <p-input-number
+              formControlName="maxConnections"
+              [min]="0"
+              inputId="maxConnections"
+              styleClass="w-full"
+              [showButtons]="true"
+              [decrementButtonClass]="'bg-slate-100 hover:bg-slate-200'"
+              [incrementButtonClass]="'bg-slate-100 hover:bg-slate-200'"
+              buttonLayout="horizontal"
+              [inputStyleClass]="'w-full'"
+            >
+              <ng-template pTemplate="incrementbuttonicon">
+                <span class="pi pi-plus"></span>
+              </ng-template>
+              <ng-template pTemplate="decrementbuttonicon">
+                <span class="pi pi-minus"></span>
+              </ng-template>
+            </p-input-number>
+            <label for="maxConnections" class="text-gray-600">Connections</label>
+          </p-float-label>
+          <p-message
+            *ngIf="filterFormGroup.get('maxConnections')?.errors?.['required'] && (filterFormGroup.get('maxConnections')?.dirty || filterFormGroup.get('maxConnections')?.touched || submitted)"
+            severity="error"
+            text="Number of Connections is required."
+          ></p-message>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
+      <p-button
+        label="Reset"
+        icon="pi pi-refresh"
+        (click)="onReset()"
+        styleClass="p-button-secondary"
+      ></p-button>
+      <p-button
+        label="Search"
+        type="submit"
+        icon="pi pi-search"
+        styleClass="p-button-primary"
+      ></p-button>
+    </div>
+  </form>
+</p-card>

@@ -1,0 +1,18 @@
+<div class="pt-6">
+  <wea5-time-table-search (onConnectionsChange)="onConnectionsChange($event)"></wea5-time-table-search>
+</div>
+
+@if (connections.length === 0) {
+  <div class="pt-6">
+    <p-card class="shadow-2xl">
+      <div class="text-center">
+        <h1 class="text-2xl font-bold">No connections found</h1>
+      </div>
+    </p-card>
+  </div>
+} @else {
+  @for (con of connections; track con) {
+    <wea5-time-table-connection [Connection]="con"></wea5-time-table-connection>
+  }
+}
+
