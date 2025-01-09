@@ -1,11 +1,23 @@
-import {Component, Input, OnChanges} from '@angular/core';
-import {Connection} from '../../../../shared/models/connection';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {ConnectionDto} from '../../../../shared/dtos/connectionDto';
 import {Timeline} from 'primeng/timeline';
 import {PrimeTemplate} from 'primeng/api';
-import {SubConnection} from '../../../../shared/models/subConnection';
+import {SubConnectionDto} from '../../../../shared/dtos/subConnectionDto';
 import {TimelinePoint} from '../../../../shared/interfaces/timelinePoint';
-import {Time} from '@angular/common';
+import {NgClass, NgIf, Time} from '@angular/common';
 import {Card} from 'primeng/card';
+import {StationDto} from '../../../../shared/dtos/stationDto';
+import {StationService} from '../../../../shared/services/api/station.service';
+import {Tag} from 'primeng/tag';
+
+
+interface TimelineEvent {
+  label: string;
+  time: string;
+  type: 'departure' | 'transfer' | 'arrival';
+  routeNumber?: number;
+}
+
 
 @Component({
   selector: 'wea5-time-table-connection',
@@ -13,42 +25,69 @@ import {Card} from 'primeng/card';
   imports: [
     Timeline,
     PrimeTemplate,
-    Card
+    Card,
+    NgClass,
+    NgIf,
+    Tag
   ],
   templateUrl: './time-table-connection.component.html',
   styles: ``
 })
-export class TimeTableConnectionComponent implements OnChanges {
-  @Input() Connection: Connection = new Connection([]);
-  timelinePoints: TimelinePoint[] = [];
+export class TimeTableConnectionComponent implements OnInit {
+  @Input() connection: ConnectionDto = new ConnectionDto([]);
+  timelineEvents: TimelineEvent[] = [];
+  fromStation: StationDto = new StationDto();
+  toStation: StationDto = new StationDto();
+  constructor(private stationService : StationService) {
 
-  constructor() {
   }
 
-  ngOnChanges(): void {
-    this.timelinePoints = this.generateTimelinePoints(this.Connection.subConnections);
-    console.log(this.timelinePoints);
-  }
+  ngOnInit() {
+    const subConnections = this.connection.subConnections;
 
-  //helper function to generate timeline points
-  generateTimelinePoints(subConnections: SubConnection[]): TimelinePoint[] {
-    const points: TimelinePoint[] = [];
-    subConnections.forEach((subCon) => {
-      points.push({
-        routeId: subCon.routeId,
-        delayInMinutes: subCon.delayInMinutes,
-        type: 'departure',
-        time: subCon.departureTime,
-        stationId: subCon.fromStationId
-      });
-      points.push({
-        routeId: subCon.routeId,
-        delayInMinutes: subCon.delayInMinutes,
-        type: 'arrival',
-        time: subCon.arrivalTime,
-        stationId: subCon.toStationId
-      });
+    this.stationService.getStationById(subConnections[0].fromStationId).subscribe(station => {
+      this.fromStation = station;
     });
-    return points;
+    this.stationService.getStationById(subConnections[subConnections.length - 1].toStationId).subscribe(station => {
+      this.toStation = station;
+    });
+
+    this.timelineEvents = this.createTimelineEvents(subConnections);
   }
+
+  private createTimelineEvents(subConnections: SubConnectionDto[]): TimelineEvent[] {
+    const events: TimelineEvent[] = [];
+
+    subConnections.forEach((conn, index) => {
+      if (index === 0) {
+        events.push({
+          label: 'Departure',
+          time: conn.departureTime,
+          type: 'departure',
+          routeNumber: conn.routeNr
+        });
+      }
+
+      if (index < subConnections.length - 1) {
+        events.push({
+          label: 'Transfer',
+          time: conn.arrivalTime,
+          type: 'transfer',
+          routeNumber: subConnections[index + 1].routeNr
+        });
+      }
+
+      if (index === subConnections.length - 1) {
+        events.push({
+          label: 'Arrival',
+          time: conn.arrivalTime,
+          type: 'arrival'
+        });
+      }
+    });
+
+    return events;
+  }
+
+
 }

@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, Observable, of, retry, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
-import {Location} from '../../models/location';
-import {StationWithDistance} from '../../models/stationWithDistance';
-import {Station} from '../../models/station';
+import {LocationDto} from '../../dtos/locationDto';
+import {StationWithDistanceDto} from '../../dtos/stationWithDistanceDto';
+import {StationDto} from '../../dtos/stationDto';
 import {StationForInsertDto} from '../../dtos/stationForInsertDto';
 
 @Injectable({
@@ -20,34 +20,34 @@ export class StationService {
     return of(null);
   }
 
-  getAllFilteredStations(location: Location, searchString: string): Observable<StationWithDistance[]> {
+  getAllFilteredStations(location: LocationDto, searchString: string): Observable<StationWithDistanceDto[]> {
 
     let params = {'latitude': location.latitude, 'longitude': location.longitude, 'searchString': searchString};
 
-    return this.http.get<StationWithDistance[]>(`${environment.apiUrl}/stations/filtered`, {params: params})
+    return this.http.get<StationWithDistanceDto[]>(`${environment.apiUrl}/stations/filtered`, {params: params})
       .pipe(
         retry(3),
         catchError(this.errorHandler)
       );
   }
 
-  getAllStations(): Observable<Station[]> {
-    return this.http.get<Station[]>(`${environment.apiUrl}/stations`)
+  getAllStations(): Observable<StationDto[]> {
+    return this.http.get<StationDto[]>(`${environment.apiUrl}/stations`)
       .pipe(
         retry(3),
         catchError(this.errorHandler)
       );
   }
 
-  getStationById(id: number): Observable<Station> {
-    return this.http.get<Station>(`${environment.apiUrl}/stations/${id}`)
+  getStationById(id: number): Observable<StationDto> {
+    return this.http.get<StationDto>(`${environment.apiUrl}/stations/${id}`)
       .pipe(
         retry(3),
         catchError(this.errorHandler)
       );
   }
 
-  updateStation(station: Station): Observable<any> {
+  updateStation(station: StationDto): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/stations/${station.id}`, station)
       .pipe(
         retry(3),
@@ -56,8 +56,8 @@ export class StationService {
 
   }
 
-  createStation(stationForInsertDto: StationForInsertDto): Observable<Station> {
-    return this.http.post<Station>(`${environment.apiUrl}/stations`, stationForInsertDto)
+  createStation(stationForInsertDto: StationForInsertDto): Observable<StationDto> {
+    return this.http.post<StationDto>(`${environment.apiUrl}/stations`, stationForInsertDto)
       .pipe(
         retry(3),
         catchError(this.errorHandler)

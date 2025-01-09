@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, Observable, of, retry, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
-import {Holiday} from '../../models/holiday';
+import {HolidayDto} from '../../dtos/holidayDto';
 import {HolidayForInsertDto} from '../../dtos/holidayForInsertDto';
 
 @Injectable({
@@ -18,16 +18,16 @@ export class HolidayService {
     return of(null);
   }
 
-  getAllHolidays(): Observable<Holiday[]> {
-    return this.http.get<Holiday[]>(`${environment.apiUrl}/holidays`)
+  getAllHolidays(): Observable<HolidayDto[]> {
+    return this.http.get<HolidayDto[]>(`${environment.apiUrl}/holidays`)
       .pipe(
         retry(3),
         catchError(this.errorHandler)
       );
   }
 
-  getHolidayById(id: number): Observable<Holiday> {
-    return this.http.get<Holiday>(`${environment.apiUrl}/holidays/${id}`)
+  getHolidayById(id: number): Observable<HolidayDto> {
+    return this.http.get<HolidayDto>(`${environment.apiUrl}/holidays/${id}`)
       .pipe(
         map(holiday => {
           if (holiday.fromDate) {
@@ -43,15 +43,15 @@ export class HolidayService {
       );
   }
 
-  createHoliday(holiday: HolidayForInsertDto): Observable<Holiday> {
-    return this.http.post<Holiday>(`${environment.apiUrl}/holidays`, holiday)
+  createHoliday(holiday: HolidayForInsertDto): Observable<HolidayDto> {
+    return this.http.post<HolidayDto>(`${environment.apiUrl}/holidays`, holiday)
       .pipe(
         retry(3),
         catchError(this.errorHandler)
       );
   }
 
-  updateHoliday(holiday: Holiday): Observable<any> {
+  updateHoliday(holiday: HolidayDto): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/holidays/${holiday.id}`, holiday)
       .pipe(
         retry(3),
@@ -59,7 +59,7 @@ export class HolidayService {
       );
   }
 
-  deleteHoliday(holiday: Holiday): Observable<any> {
+  deleteHoliday(holiday: HolidayDto): Observable<any> {
     return this.http.delete<any>(`${environment.apiUrl}/holidays/${holiday.id}`)
       .pipe(
         retry(3),

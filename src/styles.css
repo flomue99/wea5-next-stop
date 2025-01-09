@@ -1,10 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+
 @layer tailwind-base, primeng, tailwind-utilities;
+
 @layer tailwind-base {
   @tailwind base;
 }
+
 @layer primeng;
+
 @layer tailwind-utilities {
   @tailwind components;
   @tailwind utilities;
@@ -28,6 +32,26 @@
   @apply hover:bg-emerald-200 hover:border-emerald-200;
   @apply focus:bg-emerald-200 focus:border-emerald-200 focus:outline-none focus:ring-0;
   @apply active:bg-emerald-200 active:border-emerald-200;
+}
+
+.p-timeline-event-opposite,
+.p-timeline-event-content {
+  display: none !important;
+}
+
+.p-timeline-event {
+  min-height: 10px !important;
+  height: 10px !important;
+}
+
+.p-timeline {;
+  min-height: 10px !important;
+  height: 10px !important;
+}
+
+.p-timeline-event-separator {
+  min-height: 20px !important;
+  height: 10px !important;
 }
 
 * {

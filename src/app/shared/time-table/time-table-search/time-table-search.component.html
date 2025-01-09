@@ -30,7 +30,7 @@
             <p-message
               *ngIf="filterFormGroup.get('fromStation')?.errors?.['required'] && (filterFormGroup.get('fromStation')?.dirty || filterFormGroup.get('fromStation')?.touched || submitted)"
               severity="error"
-              text="From StationWithDistance is required."
+              text="From Station is required."
             ></p-message>
           </div>
 
@@ -58,7 +58,7 @@
             <p-message
               *ngIf="filterFormGroup.get('toStation')?.errors?.['required'] && (filterFormGroup.get('toStation')?.dirty || filterFormGroup.get('toStation')?.touched || submitted)"
               severity="error"
-              text="To StationWithDistance is required."
+              text="To Station is required."
             ></p-message>
           </div>
         </div>

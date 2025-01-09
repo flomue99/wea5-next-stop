@@ -1,4 +1,4 @@
-export class Holiday{
+export class HolidayDto {
   constructor(
     public id?: number,
     public name?: string,

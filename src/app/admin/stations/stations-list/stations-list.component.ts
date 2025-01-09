@@ -8,10 +8,10 @@ import {Ripple} from "primeng/ripple";
 import {RouterLink} from "@angular/router";
 import {TableModule} from "primeng/table";
 import {Tooltip} from "primeng/tooltip";
-import {StationWithDistance} from '../../../../shared/models/stationWithDistance';
+import {StationWithDistanceDto} from '../../../../shared/dtos/stationWithDistanceDto';
 import {StationService} from '../../../../shared/services/api/station.service';
-import {Station} from '../../../../shared/models/station';
-import {Holiday} from '../../../../shared/models/holiday';
+import {StationDto} from '../../../../shared/dtos/stationDto';
+import {HolidayDto} from '../../../../shared/dtos/holidayDto';
 
 @Component({
   selector: 'wea5-stations-list',
@@ -32,7 +32,7 @@ import {Holiday} from '../../../../shared/models/holiday';
   styles: ``
 })
 export class StationsListComponent implements OnInit {
-  stations: Station[] = [];
+  stations: StationDto[] = [];
   constructor(private stationsService: StationService) {
   }
 

@@ -1,11 +1,11 @@
-import {Location} from './location';
+import {LocationDto} from './locationDto';
 
-export class Station{
+export class StationDto {
   constructor(
     public id?: number,
     public name?: string,
     public abbreviation?: string,
-    public location?: Location,
+    public location?: LocationDto,
   ) {
   }
 }

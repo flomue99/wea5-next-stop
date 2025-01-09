@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TableModule} from 'primeng/table';
-import {Holiday} from '../../../../shared/models/holiday';
+import {HolidayDto} from '../../../../shared/dtos/holidayDto';
 import {DatePipe} from '@angular/common';
 import {Card} from 'primeng/card';
 import {Button, ButtonDirective} from 'primeng/button';
@@ -31,9 +31,9 @@ import {Fieldset} from 'primeng/fieldset';
   styles: ``
 })
 export class HolidaysListComponent implements OnInit {
-  holidays: Holiday[] = [];
+  holidays: HolidayDto[] = [];
   deleteHolidayDialogVisible:boolean = false;
-  selectedHolidayForDelete: Holiday | undefined;
+  selectedHolidayForDelete: HolidayDto | undefined;
   constructor(private holidaysService: HolidayService,) {
   }
 
@@ -45,7 +45,7 @@ export class HolidaysListComponent implements OnInit {
       });
   }
 
-  onShowDeleteHolidayDialog(holiday: Holiday) {
+  onShowDeleteHolidayDialog(holiday: HolidayDto) {
     this.deleteHolidayDialogVisible = true;
     this.selectedHolidayForDelete = holiday;
   }

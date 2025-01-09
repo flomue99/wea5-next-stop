@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, Observable, of} from 'rxjs';
 import {environment} from   '../../../environments/environment';
 import {SearchFilter} from '../../models/search-filter';
-import {Connection} from '../../models/connection';
+import {ConnectionDto} from '../../dtos/connectionDto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ConnectionService {
     return of(null);
   }
 
-  getConnectionsBetweenTwoStops(searchFilter: SearchFilter): Observable<Connection[]> {
+  getConnectionsBetweenTwoStops(searchFilter: SearchFilter): Observable<ConnectionDto[]> {
 
     let params = {
       'FromStationId': searchFilter.fromStationId,
@@ -29,7 +29,7 @@ export class ConnectionService {
       'MaxConnections': searchFilter.maxConnections
     };
 
-    return this.http.get<Connection[]>(`${environment.apiUrl}/connections`, {params: params})
+    return this.http.get<ConnectionDto[]>(`${environment.apiUrl}/connections`, {params: params})
       .pipe(
         catchError(this.errorHandler)
       );

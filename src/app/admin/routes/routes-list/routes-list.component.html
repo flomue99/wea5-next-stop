@@ -1,1 +1,83 @@
-<p>routes-list works!</p>
+<div class="pt-6">
+  <p-card class="shadow-2xl">
+    <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
+      <h1 class="text-2xl font-bold">Routes</h1>
+      <p-button
+        routerLink="/routes/create"
+        label="Add new Route"
+        icon="pi pi-plus"
+        styleClass="p-button-primary"
+      ></p-button>
+    </div>
+    <p-table
+      [value]="routes"
+      [styleClass]="'p-datatable-sm'"
+      stripedRows
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 25]"
+    >
+      <ng-template #header>
+        <tr>
+          <th pSortableColumn="id">ID <p-sortIcon field="id"/></th>
+          <th pSortableColumn="routeNumber">Route Number <p-sortIcon field="routeNumber"/></th>
+          <th pSortableColumn="validFrom">Valid From <p-sortIcon field="validFrom"/></th>
+          <th pSortableColumn="validTo">Valid To <p-sortIcon field="validTo"/></th>
+          <th >Weekdays</th>
+          <th >Weekends</th>
+          <th >Public Holidays</th>
+          <th >School Holidays</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-route>
+        <tr>
+          <td class="pt-0 pb-0">{{ route.id }}</td>
+          <td class="pt-0 pb-0">{{ route.routeNumber }}</td>
+          <td class="pt-0 pb-0">{{ route.validFrom | date: 'yyyy-MM-dd' }}</td>
+          <td class="pt-0 pb-0">{{ route.validTo | date: 'yyyy-MM-dd' }}</td>
+          <td class="pt-0 pb-0">
+            <p-tag *ngIf="route.routeOperatingDays.weekDays; else danger" icon="pi pi-check" severity="success" [rounded]="true"></p-tag>
+            <ng-template #danger>
+              <p-tag icon="pi pi-times" severity="danger" value=""></p-tag>
+            </ng-template>
+          </td>
+          <td class="pt-0 pb-0">
+            <p-tag *ngIf="route.routeOperatingDays.weekends; else danger" icon="pi pi-check" severity="success" value=""></p-tag>
+            <ng-template #danger>
+              <p-tag icon="pi pi-times" severity="danger" value=""></p-tag>
+            </ng-template>
+          </td>
+          <td class="pt-0 pb-0">
+            <p-tag *ngIf="route.routeOperatingDays.publicHolidays; else danger" icon="pi pi-check" severity="success" value=""></p-tag>
+            <ng-template #danger>
+              <p-tag icon="pi pi-times" severity="danger" value=""></p-tag>
+            </ng-template>
+          </td>
+          <td class="pt-0 pb-0">
+            <p-tag *ngIf="route.routeOperatingDays.schoolHolidays; else danger" icon="pi pi-check" severity="success" value=""></p-tag>
+            <ng-template #danger>
+              <p-tag icon="pi pi-times" severity="danger" value=""></p-tag>
+            </ng-template>
+          </td>
+          <td class="pt-0 pb-0">
+            <div class="flex items-center justify-center gap-2">
+              <button
+                pTooltip="View Details"
+                tooltipPosition="top"
+                pRipple
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                [routerLink]="['../routes', route.id]"
+                text
+                rounded
+                severity="contrast"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

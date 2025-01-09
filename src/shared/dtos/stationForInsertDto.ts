@@ -1,10 +1,10 @@
-import {Location} from '../models/location';
+import {LocationDto} from './locationDto';
 
 export class StationForInsertDto{
   constructor(
     public name: string,
     public abbreviation: string,
-    public location: Location,
+    public location: LocationDto,
   ) {
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Location } from '../../models/location';
+import { LocationDto } from '../../dtos/locationDto';
 
 @Injectable({
   providedIn: 'root',
@@ -7,9 +7,9 @@ import { Location } from '../../models/location';
 export class LocationService {
   constructor() {}
 
-  getCurrenUserLocation(): Promise<Location> {
+  getCurrenUserLocation(): Promise<LocationDto> {
     return new Promise((resolve) => {
-      navigator.geolocation.getCurrentPosition((position) => resolve(new Location(position.coords.latitude, position.coords.longitude)));
+      navigator.geolocation.getCurrentPosition((position) => resolve(new LocationDto(position.coords.latitude, position.coords.longitude)));
     });
   }
 

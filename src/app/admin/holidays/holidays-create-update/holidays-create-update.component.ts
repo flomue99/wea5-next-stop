@@ -13,7 +13,7 @@ import {InputText} from 'primeng/inputtext';
 import {Select} from 'primeng/select';
 import {HolidayService} from '../../../../shared/services/api/holiday.service';
 import {HolidayForInsertDto} from '../../../../shared/dtos/holidayForInsertDto';
-import {Holiday} from '../../../../shared/models/holiday';
+import {HolidayDto} from '../../../../shared/dtos/holidayDto';
 import {InputNumber} from 'primeng/inputnumber';
 
 interface Type {
@@ -48,7 +48,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
   isUpdatingHoliday = false;
   id!: number;
   holidayForm!: FormGroup;
-  holiday: Holiday = new Holiday();
+  holiday: HolidayDto = new HolidayDto();
 
   types: Type[] = [
     {name: 'Public Holiday', type: 'PublicHoliday'},
@@ -60,7 +60,6 @@ export class HolidayCreateUpdateComponent implements OnInit {
     private holidaysService: HolidayService,
     private route: ActivatedRoute,
     private router: Router) {
-
   }
 
   ngOnInit() {
@@ -68,7 +67,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
     this.initForm();
     if (this.id) {
       this.isUpdatingHoliday = true;
-      this.holidaysService.getHolidayById(this.id).subscribe((holiday: Holiday) => {
+      this.holidaysService.getHolidayById(this.id).subscribe((holiday: HolidayDto) => {
         this.holiday = holiday;
         this.updateForm();
       });
@@ -115,7 +114,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
           this.holidayForm.value.toDate
         );
         //redirect to the created holiday with the id
-        this.holidaysService.createHoliday(holidayForInsertDto).subscribe((res: Holiday) => {
+        this.holidaysService.createHoliday(holidayForInsertDto).subscribe((res: HolidayDto) => {
           this.router.navigate(['/holidays'])
         });
       }

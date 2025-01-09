@@ -10,8 +10,8 @@ import {DatePicker} from 'primeng/datepicker';
 import {PrimeTemplate} from 'primeng/api';
 import {InputNumber} from 'primeng/inputnumber';
 import {SelectButton} from 'primeng/selectbutton';
-import {Location} from '../../../../shared/models/location';
-import {StationWithDistance} from '../../../../shared/models/stationWithDistance';
+import {LocationDto} from '../../../../shared/dtos/locationDto';
+import {StationWithDistanceDto} from '../../../../shared/dtos/stationWithDistanceDto';
 import {StationService} from '../../../../shared/services/api/station.service';
 import {LocationService} from '../../../../shared/services/utils/location.service';
 import {AutoComplete} from 'primeng/autocomplete';
@@ -19,7 +19,7 @@ import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {SearchFilter} from '../../../../shared/models/search-filter';
 import {ConnectionService} from '../../../../shared/services/api/connection.service';
 import {DatePipe, NgClass, NgIf} from '@angular/common';
-import {Connection} from '../../../../shared/models/connection';
+import {ConnectionDto} from '../../../../shared/dtos/connectionDto';
 import {Tooltip} from 'primeng/tooltip';
 import {InputSwitch} from 'primeng/inputswitch';
 import {Message} from 'primeng/message';
@@ -55,11 +55,11 @@ import {Message} from 'primeng/message';
   styles: ``
 })
 export class TimeTableSearchComponent implements OnInit {
-  @Output() onConnectionsChange = new EventEmitter<Connection[]>();
+  @Output() onConnectionsChange = new EventEmitter<ConnectionDto[]>();
   filterFormGroup!: FormGroup;
   filter!: SearchFilter;
-  currentUserLocation!: Location;
-  stations: StationWithDistance[] = [];
+  currentUserLocation!: LocationDto;
+  stations: StationWithDistanceDto[] = [];
   submitted = false;
 
   stateOptions = [

@@ -7,12 +7,12 @@ import {InputText} from 'primeng/inputtext';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Select} from 'primeng/select';
-import {Station} from '../../../../shared/models/station';
+import {StationDto} from '../../../../shared/dtos/stationDto';
 import {StationService} from '../../../../shared/services/api/station.service';
 import {StationForInsertDto} from '../../../../shared/dtos/stationForInsertDto';
 import {InputNumber} from "primeng/inputnumber";
 import {PrimeTemplate} from "primeng/api";
-import {Location} from '../../../../shared/models/location';
+import {LocationDto} from '../../../../shared/dtos/locationDto';
 
 @Component({
   selector: 'wea5-stations-create-update',
@@ -36,7 +36,7 @@ export class StationsCreateUpdateComponent implements OnInit {
   isUpdatingStation = false;
   id!: number;
   stationForm!: FormGroup;
-  station: Station = new Station();
+  station: StationDto = new StationDto();
 
 
   constructor(
@@ -93,7 +93,7 @@ export class StationsCreateUpdateComponent implements OnInit {
         const stationForInsertDto = new StationForInsertDto(
           this.stationForm.value.name,
           this.stationForm.value.abbreviation,
-          new Location(this.stationForm.value.latitude, this.stationForm.value.longitude)
+          new LocationDto(this.stationForm.value.latitude, this.stationForm.value.longitude)
         );
         this.stationsService.createStation(stationForInsertDto).subscribe(() => {
           this.router.navigate(['/stations']);
