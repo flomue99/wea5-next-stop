@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, Observable, of} from 'rxjs';
 import {environment} from   '../../../environments/environment';
-import {SearchFilter} from '../../models/search-filter';
+import {TimelineSearchFilter} from '../../models/timeline-search-filter';
 import {ConnectionDto} from '../../dtos/connectionDto';
 
 @Injectable({
@@ -14,11 +14,10 @@ export class ConnectionService {
   }
 
   private errorHandler(error: Error | any): Observable<any> {
-    console.log(error);
     return of(null);
   }
 
-  getConnectionsBetweenTwoStops(searchFilter: SearchFilter): Observable<ConnectionDto[]> {
+  getConnectionsBetweenTwoStops(searchFilter: TimelineSearchFilter): Observable<ConnectionDto[]> {
 
     let params = {
       'FromStationId': searchFilter.fromStationId,

@@ -1,9 +1,6 @@
-export class RouteStopDto {
-  constructor(
-    public routeId: number,
-    public stationId: number,
-    public stationOrder: number,
-    public departureTime: Date,
-  ) {
-  }
+export interface RouteStopDto {
+  routeId: number;
+  stationId: number;
+  stationOrder: number;
+  departureTime: Date;
 }

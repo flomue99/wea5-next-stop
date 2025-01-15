@@ -15,6 +15,14 @@ import {HolidayService} from '../../../../shared/services/api/holiday.service';
 import {HolidayForInsertDto} from '../../../../shared/dtos/holidayForInsertDto';
 import {HolidayDto} from '../../../../shared/dtos/holidayDto';
 import {InputNumber} from 'primeng/inputnumber';
+import {TimeTableSearchErrorMessages} from '../../../../shared/error-messages/time-table-search-error-messages';
+import {AddUpdateHolidayErrorMessages} from '../../../../shared/error-messages/add-update-holiday-error-messages';
+import {
+  datesMustBeSame,
+  datesMustDiffer,
+  fromDateMustBeforeToDate
+} from '../../../../shared/validators/holidayValidators';
+import {Message} from 'primeng/message';
 
 interface Type {
   name: string;
@@ -39,7 +47,8 @@ interface Type {
     InputText,
     FormsModule,
     Select,
-    InputNumber
+    InputNumber,
+    Message
   ],
   templateUrl: './holidays-create-update.component.html',
   styles: ``
@@ -48,11 +57,12 @@ export class HolidayCreateUpdateComponent implements OnInit {
   isUpdatingHoliday = false;
   id!: number;
   holidayForm!: FormGroup;
-  holiday: HolidayDto = new HolidayDto();
+  holiday: HolidayDto = {name: '', type: '', fromDate: new Date(), toDate: new Date()};
+  errors: { [key: string]: string } = {};
 
   types: Type[] = [
     {name: 'Public Holiday', type: 'PublicHoliday'},
-    {name: 'School Holiday', type: 'SchoolHoliday '}]
+    {name: 'School Holiday', type: 'SchoolHoliday'}]
 
 
   constructor(
@@ -76,12 +86,35 @@ export class HolidayCreateUpdateComponent implements OnInit {
 
   initForm() {
     this.holidayForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required]],
       type: [null, Validators.required],
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required]
     });
+
+    this.holidayForm.statusChanges.subscribe(() => {
+      this.updateErrorMessages();
+    });
+
+    this.holidayForm.get('type')?.valueChanges.subscribe(() => {
+      this.updateValidators();
+      this.updateErrorMessages();
+    });
+
   }
+
+  updateValidators() {
+    const typeControl = this.holidayForm.get('type');
+
+    if (typeControl?.value.type === 'SchoolHoliday') {
+      this.holidayForm.setValidators([datesMustDiffer(), fromDateMustBeforeToDate()]);
+    } else if (typeControl?.value.type === 'PublicHoliday') {
+      this.holidayForm.setValidators([datesMustBeSame()]);
+    }
+
+    this.holidayForm.updateValueAndValidity();
+  }
+
 
   updateForm() {
     this.holidayForm.patchValue({
@@ -90,10 +123,43 @@ export class HolidayCreateUpdateComponent implements OnInit {
       fromDate: this.holiday.fromDate,
       toDate: this.holiday.toDate
     });
+
+    this.updateValidators();
+  }
+
+  updateErrorMessages() {
+    this.errors = {};
+
+    // check overall form error
+    if (this.holidayForm.errors?.['datesMustDiffer']) {
+      this.errors['formError'] = 'From and To date must be different.';
+    }
+
+    if (this.holidayForm.errors?.['fromDateMustBeBeforeToDate']) {
+      this.errors['formError'] = 'From date must be before To date.';
+    }
+
+    if (this.holidayForm.errors?.['datesMustBeSame']) {
+      this.errors['formError'] = 'Dates must be the same.';
+    }
+
+    for (const message of AddUpdateHolidayErrorMessages) {
+      if (this.holidayForm.get(message.forControl)?.errors?.[message.forValidator]) {
+        this.errors[message.forControl] = message.text;
+      }
+      const control = this.holidayForm.get(message.forControl);
+      if (control &&
+        control.dirty &&
+        control.invalid &&
+        control.errors != null &&
+        control.errors[message.forValidator] &&
+        !this.errors[message.forControl]) {
+        this.errors[message.forControl] = message.text;
+      }
+    }
   }
 
   onSubmit() {
-    console.log(this.holidayForm.value);
     if (this.holidayForm.valid) {
       //update
       if (this.isUpdatingHoliday) {
@@ -107,12 +173,12 @@ export class HolidayCreateUpdateComponent implements OnInit {
           this.router.navigate(['/holidays']);
         });
       } else { //create
-        const holidayForInsertDto = new HolidayForInsertDto(
-          this.holidayForm.value.name,
-          this.holidayForm.value.type.type,
-          this.holidayForm.value.fromDate,
-          this.holidayForm.value.toDate
-        );
+        const holidayForInsertDto = {
+          name: this.holidayForm.value.name,
+          type: this.holidayForm.value.type.type,
+          fromDate: this.holidayForm.value.fromDate,
+          toDate: this.holidayForm.value.toDate
+        };
         //redirect to the created holiday with the id
         this.holidaysService.createHoliday(holidayForInsertDto).subscribe((res: HolidayDto) => {
           this.router.navigate(['/holidays'])

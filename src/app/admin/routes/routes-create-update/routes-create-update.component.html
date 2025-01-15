@@ -1,97 +1,193 @@
 <div class="pt-6">
   <p-card class="shadow-2xl">
-    <!--     <form [formGroup]="holidayForm" (ngSubmit)="onSubmit()" class="space-y-4">-->
-    <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
-      @if (isDetailsView) {
-        <h1 class="text-2xl font-bold">Details for Route with ID: {{ id }}</h1>
-      } @else {
-        <h1 class="text-2xl font-bold">Create Route</h1>
-      }
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <form class="space-y-4" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+      <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
+        @if (isDetailsView) {
+          <h1 class="text-2xl font-bold">Details for Route with ID: {{ id }}</h1>
+        } @else {
+          <h1 class="text-2xl font-bold">Create Route</h1>
+        }
+      </div>
 
-      <div class="space-y-4 md:col-span-2">
-        <div class="grid grid-cols-2 gap-3">
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="relative">
+            <p-float-label variant="on" class="w-full">
+              <p-input-number
+                formControlName="routeNumber"
+                inputId="routeNr_label"
+                class="w-full"
+                [inputStyleClass]="'w-full'"
+                styleClass="w-full"
+              >
+              </p-input-number>
+              <label for="routeNr_label" class="text-gray-600">Route Number</label>
+            </p-float-label>
+          </div>
 
-        </div>
-        <div class="grid grid-cols-2 gap-3">
+          <div class="relative">
+            <p-float-label variant="on" class="w-full">
+              <p-datepicker
+                formControlName="validFrom"
+                [showIcon]="true"
+                inputId="fromDateLabel"
+                styleClass="w-full"
+                [inputStyleClass]="'w-full'"
+              ></p-datepicker>
+              <label for="fromDateLabel" class="text-gray-600">Operates From Date</label>
+            </p-float-label>
+          </div>
 
+          <div class="relative">
+            <p-float-label variant="on" class="w-full">
+              <p-datepicker
+                formControlName="validTo"
+                [showIcon]="true"
+                inputId="toDate"
+                styleClass="w-full"
+                [inputStyleClass]="'w-full'"
+              >
+              </p-datepicker>
+              <label for="toDate" class="text-gray-600">
+                Operates Until Date
+              </label>
+            </p-float-label>
+          </div>
+          <div>
+            <h5 class="text-lg font-semibold mb-3">Operating Days</h5>
+            <div class="flex flex-wrap gap-4">
+              <div class="flex align-items-center">
+                <p-checkbox inputId="weekDays" binary="true" formControlName="weekDays"></p-checkbox>
+                <label for="weekDays" class="ml-2"> Weekdays </label>
+              </div>
+              <div class="flex align-items-center">
+                <p-checkbox inputId="weekends" formControlName="weekends" binary="true"></p-checkbox>
+                <label for="weekends" class="ml-2"> Weekends </label>
+              </div>
+              <div class="flex align-items-center">
+                <p-checkbox inputId="publicHolidays" formControlName="publicHolidays" binary="true"></p-checkbox>
+                <label for="publicHolidays" class="ml-2"> Public Holidays </label>
+              </div>
+              <div class="flex align-items-center">
+                <p-checkbox inputId="schoolHolidays" formControlName="schoolHolidays" binary="true"></p-checkbox>
+                <label for="schoolHolidays" class="ml-2"> School Holidays </label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <p-table
-      [reorderableColumns]="true"
-      [value]="routeWithRouteStops.routeStops"
-      [styleClass]="'p-datatable-sm'"
-      stripedRows
-    >
-      <ng-template #header>
-        <tr>
-          <th style="width:3rem"></th>
-          <th>Station Order</th>
-          <th>Station ID</th>
-          <th>Departure Time</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template
-        #body
-        let-routeStop
-        let-index="rowIndex"
-      >
-        <tr [pReorderableRow]="index">
-          <td>
-            <span class="pi pi-bars" pReorderableRowHandle></span>
-          </td>
-          <td class="pt-0 pb-0">{{ routeStop.stationOrder }}</td>
-          <td class="pt-0 pb-0">{{ getStationName(routeStop.stationId) }}</td>
-          <td class="pt-0 pb-0">{{ routeStop.departureTime}}</td>
-          <td class="pt-0 pb-0">
-            <div class="flex items-center justify-center gap-2">
-              <button
-                pTooltip="Remove Stop"
-                tooltipPosition="top"
-                pRipple
-                pButton
-                type="button"
-                icon="pi pi-trash"
-                text
-                rounded
-                severity="danger"
-                (click)="onRemoveRouteStop(routeStop)"
-              ></button>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+      <div>
+        <h5 class="text-lg font-semibold mb-3">Select Stations</h5>
+        <div class="flex items-center justify-between gap-1 w-1/2 mb-3" formGroupName="stationSelection">
+          <p-float-label variant="on" class="w-full">
+            <p-auto-complete
+              class="ng-invalid ng-dirty"
+              [suggestions]="stationForSearch"
+              (completeMethod)="filterStation($event)"
+              formControlName="station"
+              inputId="station"
+              optionLabel="name"
+              [dropdown]="true"
+              styleClass="w-full"
+            >
+              <ng-template let-station #item>
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ station.name }}</span>
+                  <span class="text-sm text-gray-600">{{ station.abbreviation }}</span>
+                </div>
+              </ng-template>
+            </p-auto-complete>
+            <label for="station" class="text-gray-600">Station</label>
+          </p-float-label>
+          <p-float-label variant="on" class="w-full">
+            <p-date-picker
+              formControlName="departureTime"
+              [timeOnly]="true"
+              [showIcon]="true"
+              inputId="departureTime"
+              styleClass="w-full"
+              [inputStyleClass]="'w-full'"
+            >
+              <ng-template pTemplate="inputicon">
+                <i class="pi pi-clock"></i>
+              </ng-template>
+            </p-date-picker>
+            <label for="departureTime" class="text-gray-600">
+              Departure Time
+            </label>
+          </p-float-label>
+          <p-button
+            (click)="onAddStation()"
+            label="Add"
+            icon="pi pi-plus"
+            styleClass="p-button-primary w-full"
+          ></p-button>
+        </div>
+      </div>
+      <p-card>
+        <h5 class="text-lg font-semibold mb-3">Selected Stations</h5>
+        <p-table
+          [value]="routeWithRouteStops.routeStops"
+          reorderableColumns="true"
+          [styleClass]="'p-datatable-sm'"
+          stripedRows
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width:3rem"></th>
+              <th>Station Order</th>
+              <th>Station</th>
+              <th>Departure Time</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-stop let-index="rowIndex">
+            <tr [pReorderableRow]="index">
+              <td>
+                <span class="pi pi-bars" pReorderableRowHandle></span>
+              </td>
+              <td>
+                {{ stop.stationOrder }}
+              </td>
+              <td>
+                {{ getStationName(stop.stationId) }}
+              </td>
+              <td>
+                {{ stop.departureTime | date: 'HH:mm:ss'  }}
+              </td>
+              <td>
 
-    <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
-      @if (isDetailsView) {
-        <p-button
-          routerLink="/routes"
-          label="Close"
-          icon="pi pi-times"
-          styleClass="p-button-secondary"
-        ></p-button>
-      } @else {
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+
+
+      <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
         <p-button
           routerLink="/routes"
           label="Cancel"
           icon="pi pi-times"
           styleClass="p-button-secondary"
         ></p-button>
-      }
-      @if (!isDetailsView) {
-        <p-button
-          label="Create Route"
-          type="submit"
-          icon="pi pi-save"
-          styleClass="p-button-primary"
-        ></p-button>
-      }
-    </div>
-    <!--    </form>-->
+        @if (isDetailsView) {
+          <p-button
+            label="Update Route"
+            type="submit"
+            icon="pi pi-save"
+            styleClass="p-button-primary"
+          ></p-button>
+        } @else {
+          <p-button
+            label="Create Route"
+            type="submit"
+            icon="pi pi-save"
+            styleClass="p-button-primary"
+          ></p-button>
+        }
+      </div>
+    </form>
   </p-card>
 </div>
 

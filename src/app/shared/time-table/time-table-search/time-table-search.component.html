@@ -9,8 +9,8 @@
           <div class="relative">
             <p-float-label variant="on" class="w-full">
               <p-auto-complete
-                class="ng-invalid ng-dirty"
                 formControlName="fromStation"
+                class="ng-invalid ng-dirty"
                 [suggestions]="stations"
                 (completeMethod)="filterStation($event)"
                 inputId="fromStation"
@@ -25,13 +25,14 @@
                   </div>
                 </ng-template>
               </p-auto-complete>
-              <label for="fromStation" class="text-gray-600">From Station</label>
+              <label for="fromStation" class="text-gray-600">From Stations</label>
             </p-float-label>
-            <p-message
-              *ngIf="filterFormGroup.get('fromStation')?.errors?.['required'] && (filterFormGroup.get('fromStation')?.dirty || filterFormGroup.get('fromStation')?.touched || submitted)"
-              severity="error"
-              text="From Station is required."
-            ></p-message>
+            @if (errors['fromStation']) {
+              <p-message
+                severity="error"
+                text="{{ errors['fromStation'] }}"
+              ></p-message>
+            }
           </div>
 
           <div class="relative">
@@ -55,11 +56,12 @@
               </p-auto-complete>
               <label for="toStation" class="text-gray-600">To Station</label>
             </p-float-label>
-            <p-message
-              *ngIf="filterFormGroup.get('toStation')?.errors?.['required'] && (filterFormGroup.get('toStation')?.dirty || filterFormGroup.get('toStation')?.touched || submitted)"
-              severity="error"
-              text="To Station is required."
-            ></p-message>
+            @if (errors['toStation']) {
+              <p-message
+                severity="error"
+                text="{{ errors['toStation'] }}"
+              ></p-message>
+            }
           </div>
         </div>
       </div>
@@ -75,6 +77,12 @@
             ></p-date-picker>
             <label for="date" class="text-gray-600">Travel Date</label>
           </p-float-label>
+          @if (errors['date']) {
+            <p-message
+              severity="error"
+              text="{{ errors['date'] }}"
+            ></p-message>
+          }
         </div>
 
         <div class="relative">
@@ -95,11 +103,12 @@
               {{ filterFormGroup.get('isArrivalTime')!.value ? 'Arrival' : 'Departure' }} Time
             </label>
           </p-float-label>
-          <p-message
-            *ngIf="filterFormGroup.get('time')?.errors?.['time'] && (filterFormGroup.get('time')?.dirty || filterFormGroup.get('time')?.touched || submitted)"
-            severity="error"
-            text="{{ filterFormGroup.get('isArrivalTime')!.value ? 'Arrival' : 'Departure' }} Time is required."
-          ></p-message>
+          @if (errors['time']) {
+            <p-message
+              severity="error"
+              text="{{ errors['time'] }}"
+            ></p-message>
+          }
         </div>
       </div>
 
@@ -140,13 +149,20 @@
             </p-input-number>
             <label for="maxConnections" class="text-gray-600">Connections</label>
           </p-float-label>
-          <p-message
-            *ngIf="filterFormGroup.get('maxConnections')?.errors?.['required'] && (filterFormGroup.get('maxConnections')?.dirty || filterFormGroup.get('maxConnections')?.touched || submitted)"
-            severity="error"
-            text="Number of Connections is required."
-          ></p-message>
+          @if (errors['maxConnections']) {
+            <p-message
+              severity="error"
+              text="{{ errors['maxConnections'] }}"
+            ></p-message>
+          }
         </div>
       </div>
+      @if (errors['formError']) {
+        <p-message
+          severity="error"
+          text="{{ errors['formError'] }}"
+        ></p-message>
+      }
     </div>
 
     <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
@@ -161,6 +177,7 @@
         type="submit"
         icon="pi pi-search"
         styleClass="p-button-primary"
+        [disabled]="filterFormGroup.invalid"
       ></p-button>
     </div>
   </form>

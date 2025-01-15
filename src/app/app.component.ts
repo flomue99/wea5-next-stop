@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {HeaderComponent} from './shared/header/header.component';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {authConfig} from '../shared/configs/auth.config';
 
 @Component({
   selector: 'wea5-root',
@@ -11,4 +13,9 @@ import {HeaderComponent} from './shared/header/header.component';
 })
 export class AppComponent {
   title = 'next-stop';
+
+  constructor(private oauthService: OAuthService) {
+  }
+
 }
+

@@ -14,7 +14,6 @@ export class HolidayService {
   }
 
   private errorHandler(error: Error | any): Observable<any> {
-    console.log(error);
     return of(null);
   }
 

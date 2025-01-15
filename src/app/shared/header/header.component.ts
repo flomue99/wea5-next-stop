@@ -3,6 +3,8 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MenuItem, PrimeTemplate} from 'primeng/api';
 import {Menubar} from 'primeng/menubar';
 import {Button} from 'primeng/button';
+import {LoginComponent} from '../../admin/login/login.component';
+import {AuthenticationService} from '../../../shared/services/auth/authentication.service';
 
 @Component({
   selector: 'wea5-header',
@@ -12,13 +14,17 @@ import {Button} from 'primeng/button';
     RouterLinkActive,
     PrimeTemplate,
     Menubar,
-    Button
+    Button,
+    LoginComponent
   ],
   templateUrl: './header.component.html',
   styles: ``
 })
 export class HeaderComponent implements OnInit {
   items: MenuItem[] | undefined;
+
+  constructor(protected authenticationService: AuthenticationService) {
+  }
 
   ngOnInit(): void {
     this.items = [
@@ -28,7 +34,7 @@ export class HeaderComponent implements OnInit {
         routerLink: 'timetable',
       },
       {
-        label: 'Indicator Board',
+        label: 'Departure Board',
         icon: 'pi pi-map',
         routerLink: 'indicator-board',
       },

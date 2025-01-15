@@ -16,6 +16,10 @@
     </a>
   </ng-template>
   <ng-template #end>
-    <p-button label="Login" icon="pi pi-sign-in"></p-button>
+    @if (!authenticationService.isLoggedIn()) {
+      <wea5-login></wea5-login>
+    } @else {
+      {{ authenticationService.getCurrentLoggedInUserEmail() }}
+    }
   </ng-template>
 </p-menubar>

@@ -6,6 +6,7 @@ import {LocationDto} from '../../dtos/locationDto';
 import {StationWithDistanceDto} from '../../dtos/stationWithDistanceDto';
 import {StationDto} from '../../dtos/stationDto';
 import {StationForInsertDto} from '../../dtos/stationForInsertDto';
+import {AuthenticationService} from '../auth/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class StationService {
   constructor(private http: HttpClient) {
   }
 
+
   private errorHandler(error: Error | any): Observable<any> {
-    console.log(error);
     return of(null);
   }
 
@@ -28,6 +29,17 @@ export class StationService {
       .pipe(
         retry(3),
         catchError(this.errorHandler)
+      );
+  }
+
+  getNearestStation(location: LocationDto): Observable<StationWithDistanceDto> {
+    let params = {'latitude': location.latitude, 'longitude': location.longitude};
+
+    return this.http.get<StationWithDistanceDto>(`${environment.apiUrl}/stations/filtered`, {params: params})
+      .pipe(
+        retry(3),
+        catchError(this.errorHandler),
+        map(stations => stations[0])
       );
   }
 

@@ -1,4 +1,4 @@
-export class SearchFilter{
+export class TimelineSearchFilter {
   constructor(
     public fromStationId: number,
     public toStationId: string,

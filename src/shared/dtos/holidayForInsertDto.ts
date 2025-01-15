@@ -1,9 +1,6 @@
-export class HolidayForInsertDto{
-  constructor(
-    public name: string,
-    public type: string,
-    public fromDate: Date,
-    public toDate: Date,
-  ) {
-  }
+export interface HolidayForInsertDto {
+  name: string;
+  type: string;
+  fromDate: Date;
+  toDate: Date;
 }

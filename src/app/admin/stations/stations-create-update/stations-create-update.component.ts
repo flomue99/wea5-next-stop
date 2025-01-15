@@ -12,7 +12,10 @@ import {StationService} from '../../../../shared/services/api/station.service';
 import {StationForInsertDto} from '../../../../shared/dtos/stationForInsertDto';
 import {InputNumber} from "primeng/inputnumber";
 import {PrimeTemplate} from "primeng/api";
-import {LocationDto} from '../../../../shared/dtos/locationDto';
+import {
+  AddUpdateStationErrorMessages
+} from '../../../../shared/error-messages/add-update-station-error-messages';
+import {Message} from 'primeng/message';
 
 @Component({
   selector: 'wea5-stations-create-update',
@@ -27,7 +30,8 @@ import {LocationDto} from '../../../../shared/dtos/locationDto';
     RouterLink,
     Select,
     InputNumber,
-    PrimeTemplate
+    PrimeTemplate,
+    Message
   ],
   templateUrl: './stations-create-update.component.html',
   styles: ``
@@ -36,8 +40,8 @@ export class StationsCreateUpdateComponent implements OnInit {
   isUpdatingStation = false;
   id!: number;
   stationForm!: FormGroup;
-  station: StationDto = new StationDto();
-
+  station: StationDto = {name: '', abbreviation: '', location: {latitude: 0, longitude: 0}};
+  errors: { [key: string]: string } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -61,9 +65,13 @@ export class StationsCreateUpdateComponent implements OnInit {
   initForm() {
     this.stationForm = this.fb.group({
       name: ['', Validators.required],
-      abbreviation: ['', Validators.required],
-      latitude: [null, Validators.required],
-      longitude: [null, Validators.required]
+      abbreviation: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
+      latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]]
+    });
+
+    this.stationForm.statusChanges.subscribe(() => {
+      this.updateErrorMessages();
     });
   }
 
@@ -74,6 +82,26 @@ export class StationsCreateUpdateComponent implements OnInit {
       latitude: this.station.location!.latitude,
       longitude: this.station.location!.longitude
     });
+  }
+
+  updateErrorMessages() {
+    this.errors = {};
+
+
+    for (const message of AddUpdateStationErrorMessages) {
+      if (this.stationForm.get(message.forControl)?.errors?.[message.forValidator]) {
+        this.errors[message.forControl] = message.text;
+      }
+      const control = this.stationForm.get(message.forControl);
+      if (control &&
+        control.dirty &&
+        control.invalid &&
+        control.errors != null &&
+        control.errors[message.forValidator] &&
+        !this.errors[message.forControl]) {
+        this.errors[message.forControl] = message.text;
+      }
+    }
   }
 
   onSubmit() {
@@ -90,11 +118,14 @@ export class StationsCreateUpdateComponent implements OnInit {
           this.router.navigate(['/stations']);
         });
       } else {
-        const stationForInsertDto = new StationForInsertDto(
-          this.stationForm.value.name,
-          this.stationForm.value.abbreviation,
-          new LocationDto(this.stationForm.value.latitude, this.stationForm.value.longitude)
-        );
+        const stationForInsertDto: StationForInsertDto = {
+          name: this.stationForm.value.name,
+          abbreviation: this.stationForm.value.abbreviation,
+          location: {
+            latitude: this.stationForm.value.latitude,
+            longitude: this.stationForm.value.longitude,
+          },
+        };
         this.stationsService.createStation(stationForInsertDto).subscribe(() => {
           this.router.navigate(['/stations']);
         });

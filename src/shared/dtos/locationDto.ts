@@ -1,7 +1,4 @@
-export class LocationDto {
-  constructor(
-    public latitude: number,
-    public longitude: number,
-  ) {
-  }
+export interface LocationDto {
+  latitude: number;
+  longitude: number;
 }

@@ -1,0 +1,32 @@
+<div class="pt-2">
+  <div class="bg-white shadow p-2 rounded-xl">
+    <div class="flex gap-3">
+      <div class="content-center border-r border-gray-200">
+        <div class="flex flex-col pr-2">
+          <span class="font-bold">{{ departure.departureTime!.substring(0, 5) }}
+            @if (departure.delayInSeconds! / 60 > 1) {
+              <span
+                class="text-red-500 text-sm">+{{ (departure.delayInSeconds! / 60).toFixed(0) }}</span>
+            }
+          </span>
+          <span class="text-sm text-gray-600">Departure</span>
+        </div>
+      </div>
+      <div class="w-full">
+        <div class="text-center">
+          <p-tag icon="pi pi-car" severity="info" value="{{departure.routeNumber}}"></p-tag>
+        </div>
+        <p-timeline [value]="timelineEvents" layout="horizontal">
+        </p-timeline>
+        <div class="flex-row text-xs pt-3">
+          <div>
+            <span>from <span class="font-black">{{ fromStation.name }}</span></span>
+          </div>
+          <div>
+            <span>to <span class="font-black">{{ departure.endStation.name }}</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

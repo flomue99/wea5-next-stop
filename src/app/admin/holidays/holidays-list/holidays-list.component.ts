@@ -55,7 +55,6 @@ export class HolidaysListComponent implements OnInit {
       this.holidaysService
         .deleteHoliday(this.selectedHolidayForDelete)
         .subscribe(() => {
-          //this.holidays = this.holidays.filter((holiday) => holiday.id !== this.selectedHolidayForDelete?.id);
           this.holidaysService
             .getAllHolidays()
             .subscribe((holidays) => {

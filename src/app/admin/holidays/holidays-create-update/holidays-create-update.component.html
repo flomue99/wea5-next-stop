@@ -17,6 +17,12 @@
                 <input [class]="'w-full'" formControlName="name" pInputText id="name_label" autocomplete="off"/>
                 <label for="name_label">Holiday Name</label>
               </p-floatlabel>
+              @if (errors['name']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['name'] }}"
+                ></p-message>
+              }
             </div>
 
             <div class="relative">
@@ -25,6 +31,12 @@
                           styleClass="w-full"/>
                 <label for="type_label">Holiday Type</label>
               </p-floatlabel>
+              @if (errors['type']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['type'] }}"
+                ></p-message>
+              }
             </div>
           </div>
           <div class="grid grid-cols-2 gap-3">
@@ -39,6 +51,12 @@
                 ></p-datepicker>
                 <label for="fromDateLabel" class="text-gray-600">From Date</label>
               </p-float-label>
+              @if (errors['fromDate']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['fromDate'] }}"
+                ></p-message>
+              }
             </div>
 
             <div class="relative">
@@ -55,11 +73,21 @@
                   To Date
                 </label>
               </p-float-label>
+              @if (errors['toDate']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['toDate'] }}"
+                ></p-message>
+              }
             </div>
           </div>
         </div>
-
-
+        @if (errors['formError']) {
+          <p-message
+            severity="error"
+            text="{{ errors['formError'] }}"
+          ></p-message>
+        }
       </div>
       <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
         <p-button
@@ -77,6 +105,7 @@
           ></p-button>
         } @else {
           <p-button
+            [disabled]="holidayForm.invalid"
             label="Create Holiday"
             type="submit"
             icon="pi pi-save"

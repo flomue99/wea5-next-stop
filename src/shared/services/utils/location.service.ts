@@ -9,7 +9,7 @@ export class LocationService {
 
   getCurrenUserLocation(): Promise<LocationDto> {
     return new Promise((resolve) => {
-      navigator.geolocation.getCurrentPosition((position) => resolve(new LocationDto(position.coords.latitude, position.coords.longitude)));
+      navigator.geolocation.getCurrentPosition((position) => resolve( { latitude: position.coords.latitude, longitude: position.coords.longitude}));
     });
   }
 

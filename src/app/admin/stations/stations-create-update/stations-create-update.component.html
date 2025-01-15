@@ -17,13 +17,26 @@
                 <input [class]="'w-full'" formControlName="name" pInputText id="name_label" autocomplete="off"/>
                 <label for="name_label">Station Name</label>
               </p-floatlabel>
+              @if (errors['name']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['name'] }}"
+                ></p-message>
+              }
             </div>
 
             <div class="relative">
               <p-floatlabel class="w-full" variant="on">
-                <input [class]="'w-full'" formControlName="abbreviation" pInputText id="abbreviation_label" autocomplete="off"/>
+                <input [class]="'w-full'" formControlName="abbreviation" pInputText id="abbreviation_label"
+                       autocomplete="off"/>
                 <label for="abbreviation_label">Abbreviation</label>
               </p-floatlabel>
+              @if (errors['abbreviation']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['abbreviation'] }}"
+                ></p-message>
+              }
             </div>
           </div>
           <div class="grid grid-cols-2 gap-3">
@@ -39,6 +52,12 @@
                 </p-input-number>
                 <label for="lat_label" class="text-gray-600">Latitude</label>
               </p-float-label>
+              @if (errors['latitude']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['latitude'] }}"
+                ></p-message>
+              }
             </div>
             <div class="relative">
               <p-float-label variant="on" class="w-full">
@@ -51,6 +70,12 @@
                 </p-input-number>
                 <label for="long_label" class="text-gray-600">Longitude</label>
               </p-float-label>
+              @if (errors['longitude']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['longitude'] }}"
+                ></p-message>
+              }
             </div>
           </div>
         </div>
@@ -71,6 +96,7 @@
           ></p-button>
         } @else {
           <p-button
+            [disabled]="stationForm.invalid"
             label="Create"
             type="submit"
             icon="pi pi-save"

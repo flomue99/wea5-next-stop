@@ -15,14 +15,16 @@ import {StationWithDistanceDto} from '../../../../shared/dtos/stationWithDistanc
 import {StationService} from '../../../../shared/services/api/station.service';
 import {LocationService} from '../../../../shared/services/utils/location.service';
 import {AutoComplete} from 'primeng/autocomplete';
-import {debounceTime, distinctUntilChanged} from 'rxjs';
-import {SearchFilter} from '../../../../shared/models/search-filter';
+import {debounceTime, distinctUntilChanged, min} from 'rxjs';
+import {TimelineSearchFilter} from '../../../../shared/models/timeline-search-filter';
 import {ConnectionService} from '../../../../shared/services/api/connection.service';
 import {DatePipe, NgClass, NgIf} from '@angular/common';
 import {ConnectionDto} from '../../../../shared/dtos/connectionDto';
 import {Tooltip} from 'primeng/tooltip';
 import {InputSwitch} from 'primeng/inputswitch';
 import {Message} from 'primeng/message';
+import {TimeTableSearchErrorMessages} from '../../../../shared/error-messages/time-table-search-error-messages';
+import {stationsMustDifferValidator, stationValidator} from '../../../../shared/validators/stationValidators';
 
 @Component({
   selector: 'wea5-time-table-search',
@@ -57,10 +59,11 @@ import {Message} from 'primeng/message';
 export class TimeTableSearchComponent implements OnInit {
   @Output() onConnectionsChange = new EventEmitter<ConnectionDto[]>();
   filterFormGroup!: FormGroup;
-  filter!: SearchFilter;
+  filter!: TimelineSearchFilter;
   currentUserLocation!: LocationDto;
   stations: StationWithDistanceDto[] = [];
   submitted = false;
+  errors: { [key: string]: string } = {};
 
   stateOptions = [
     {label: 'Departure', value: false},
@@ -81,21 +84,23 @@ export class TimeTableSearchComponent implements OnInit {
     this.initFormGroup();
     this.locationService.getCurrenUserLocation().then((location) => {
       this.currentUserLocation = location;
-      console.log(this.currentUserLocation);
     });
   }
 
   initFormGroup() {
     const currentDate = new Date();
-    const currentTime = new Date();
 
     this.filterFormGroup = this.fb.group({
-      fromStation: [null, Validators.required],
-      toStation: [null, Validators.required],
+      fromStation: [null, [Validators.required, stationValidator()]],
+      toStation: [null, [Validators.required, stationValidator()]],
       date: [currentDate, Validators.required],
-      time: [currentTime, Validators.required],
+      time: [currentDate, Validators.required],
       isArrivalTime: [false, Validators.required],
-      maxConnections: [null, Validators.required]
+      maxConnections: [null, [Validators.required, Validators.min(1)]]
+    }, {validators: stationsMustDifferValidator()});
+
+    this.filterFormGroup.statusChanges.subscribe(() => {
+      this.updateErrorMessages();
     });
 
     this.filterFormGroup.valueChanges.subscribe(() => {
@@ -115,13 +120,39 @@ export class TimeTableSearchComponent implements OnInit {
       });
   }
 
+  updateErrorMessages() {
+    this.errors = {};
+
+    // check overall form error
+    if (this.filterFormGroup.errors?.['stationsMustDiffer']) {
+      this.errors['formError'] = 'From and To stations must be different.';
+    }
+
+    for (const message of TimeTableSearchErrorMessages) {
+      if(this.filterFormGroup.get(message.forControl)?.errors?.[message.forValidator]) {
+        this.errors[message.forControl] = message.text;
+      }
+      const control = this.filterFormGroup.get(message.forControl);
+      if (control &&
+        control.dirty &&
+        control.invalid &&
+        control.errors != null &&
+        control.errors[message.forValidator] &&
+        !this.errors[message.forControl]) {
+        this.errors[message.forControl] = message.text;
+      }
+    }
+  }
+
 
   onSubmit() {
+    this.updateErrorMessages();
     this.submitted = true;
+
     if (this.filterFormGroup.valid) {
       const formattedDate = this.datePipe.transform(this.filterFormGroup.value.date, 'yyyy-MM-ddTHH:mm:ss') || '';
       const formattedTime = this.datePipe.transform(this.filterFormGroup.value.time, 'HH:mm:ss') || '';
-      this.filter = new SearchFilter(
+      this.filter = new TimelineSearchFilter(
         this.filterFormGroup.value.fromStation.id,
         this.filterFormGroup.value.toStation.id,
         formattedDate,
@@ -138,6 +169,7 @@ export class TimeTableSearchComponent implements OnInit {
   }
 
   onReset() {
+    this.errors = {};
     this.submitted = false;
     this.initFormGroup();
     this.onConnectionsChange.emit([]);

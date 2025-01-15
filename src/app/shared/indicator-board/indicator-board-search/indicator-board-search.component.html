@@ -1,8 +1,34 @@
 <p-card class="shadow-2xl">
-  <!-- <form [formGroup]="filterFormGroup" (ngSubmit)="onSubmit()" class="space-y-4">-->
   <div class="border-b border-gray-200 pb-2">
     <h1 class="text-2xl font-bold">Next Departures</h1>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-3"> </div>
-    <!-- </form>-->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-5">
+    <div class="space-y-4 md:col-span-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="relative">
+          <p-float-label variant="on" class="w-full">
+            <p-auto-complete
+              class="ng-invalid ng-dirty"
+              [ngModel]="selectedStation"
+              [suggestions]="stations"
+              (completeMethod)="filterStation($event)"
+              (onSelect)="onSelectStation($event)"
+              inputId="departureStation"
+              optionLabel="name"
+              [dropdown]="true"
+              styleClass="w-full"
+            >
+              <ng-template let-station #item>
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ station.name }}</span>
+                  <span class="text-sm text-gray-600">{{ station.abbreviation }}</span>
+                </div>
+              </ng-template>
+            </p-auto-complete>
+            <label for="departureStation" class="text-gray-600">Departure Station</label>
+          </p-float-label>
+        </div>
+      </div>
+    </div>
+  </div>
 </p-card>

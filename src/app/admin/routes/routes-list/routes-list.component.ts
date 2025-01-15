@@ -39,7 +39,6 @@ export class RoutesListComponent implements OnInit {
       .getAllRoutes()
       .subscribe((routes) => {
         this.routes = routes;
-        console.log(routes);
       });
   }
 }

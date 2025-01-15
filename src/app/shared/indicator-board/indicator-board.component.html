@@ -1,3 +1,17 @@
 <div class="pt-6">
-  <wea5-indicator-board-search></wea5-indicator-board-search>
+  <wea5-indicator-board-search (onDeparturesChange)="onDeparturesChange($event)" (onFromStationChange)="onFromStationChange($event)"></wea5-indicator-board-search>
 </div>
+
+@if(departures.length === 0){
+  <div class="pt-6">
+    <p-card class="shadow-2xl">
+      <div class="text-center">
+        <h1 class="text-2xl font-bold">No departures found</h1>
+      </div>
+    </p-card>
+  </div>
+} @else {
+  @for (dep of departures; track dep) {
+    <wea5-indicator-board-departure [departure]="dep" [fromStation]="fromStation" ></wea5-indicator-board-departure>
+  }
+}
