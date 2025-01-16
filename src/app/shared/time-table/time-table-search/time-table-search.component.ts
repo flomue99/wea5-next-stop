@@ -64,6 +64,7 @@ export class TimeTableSearchComponent implements OnInit {
   stations: StationWithDistanceDto[] = [];
   submitted = false;
   errors: { [key: string]: string } = {};
+  serverError: any = null;
 
   stateOptions = [
     {label: 'Departure', value: false},
@@ -163,6 +164,8 @@ export class TimeTableSearchComponent implements OnInit {
       this.connectionService.getConnectionsBetweenTwoStops(this.filter).subscribe({
         next: res => {
           this.onConnectionsChange.emit(res);
+        },error: error => {
+          this.serverError = error;
         }
       });
     }

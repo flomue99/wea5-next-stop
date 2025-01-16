@@ -6,6 +6,7 @@ import {Card} from 'primeng/card';
 import {IndicatorBoardDepartureComponent} from './indicator-board-departure/indicator-board-departure.component';
 import {StationDto} from '../../../shared/dtos/stationDto';
 import {StationService} from '../../../shared/services/api/station.service';
+import {Message} from 'primeng/message';
 
 @Component({
   selector: 'wea5-indicator-board',
@@ -13,7 +14,8 @@ import {StationService} from '../../../shared/services/api/station.service';
   imports: [
     IndicatorBoardSearchComponent,
     Card,
-    IndicatorBoardDepartureComponent
+    IndicatorBoardDepartureComponent,
+    Message
   ],
   templateUrl: './indicator-board.component.html',
   styles: ``

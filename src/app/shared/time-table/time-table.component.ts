@@ -5,17 +5,19 @@ import {TimeTableConnectionComponent} from './time-table-connection/time-table-c
 import {DataView} from 'primeng/dataview';
 import {TableModule} from 'primeng/table';
 import {Card} from 'primeng/card';
+import {Message} from "primeng/message";
 
 @Component({
   selector: 'wea5-time-table',
   standalone: true,
-  imports: [
-    TimeTableSearchComponent,
-    TimeTableConnectionComponent,
-    DataView,
-    TableModule,
-    Card
-  ],
+    imports: [
+        TimeTableSearchComponent,
+        TimeTableConnectionComponent,
+        DataView,
+        TableModule,
+        Card,
+        Message
+    ],
   templateUrl: './time-table.component.html',
   styles: ``
 })

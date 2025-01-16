@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, Observable, of} from 'rxjs';
+import {catchError, Observable, of, retry, throwError} from 'rxjs';
 import {environment} from   '../../../environments/environment';
 import {TimelineSearchFilter} from '../../models/timeline-search-filter';
 import {ConnectionDto} from '../../dtos/connectionDto';
@@ -11,10 +11,6 @@ import {ConnectionDto} from '../../dtos/connectionDto';
 export class ConnectionService {
 
   constructor(private http: HttpClient) {
-  }
-
-  private errorHandler(error: Error | any): Observable<any> {
-    return of(null);
   }
 
   getConnectionsBetweenTwoStops(searchFilter: TimelineSearchFilter): Observable<ConnectionDto[]> {
@@ -30,7 +26,10 @@ export class ConnectionService {
 
     return this.http.get<ConnectionDto[]>(`${environment.apiUrl}/connections`, {params: params})
       .pipe(
-        catchError(this.errorHandler)
+        retry(3),
+        catchError(error => {
+          return throwError(() => error.error?.detail || 'An error occurred while fetching connections');
+        })
       );
   }
 }

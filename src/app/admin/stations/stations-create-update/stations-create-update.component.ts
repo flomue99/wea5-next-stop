@@ -16,6 +16,7 @@ import {
   AddUpdateStationErrorMessages
 } from '../../../../shared/error-messages/add-update-station-error-messages';
 import {Message} from 'primeng/message';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'wea5-stations-create-update',
@@ -31,7 +32,8 @@ import {Message} from 'primeng/message';
     Select,
     InputNumber,
     PrimeTemplate,
-    Message
+    Message,
+    NgIf
   ],
   templateUrl: './stations-create-update.component.html',
   styles: ``
@@ -42,6 +44,7 @@ export class StationsCreateUpdateComponent implements OnInit {
   stationForm!: FormGroup;
   station: StationDto = {name: '', abbreviation: '', location: {latitude: 0, longitude: 0}};
   errors: { [key: string]: string } = {};
+  serverError: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -106,6 +109,9 @@ export class StationsCreateUpdateComponent implements OnInit {
 
   onSubmit() {
     if (this.stationForm.valid) {
+      this.stationForm.disable();
+      this.serverError = null;
+
       if (this.isUpdatingStation) {
         this.station.id = this.id;
         this.station.name = this.stationForm.value.name;
@@ -114,8 +120,14 @@ export class StationsCreateUpdateComponent implements OnInit {
           latitude: this.stationForm.value.latitude,
           longitude: this.stationForm.value.longitude
         }
-        this.stationsService.updateStation(this.station).subscribe(() => {
-          this.router.navigate(['/stations']);
+        this.stationsService.updateStation(this.station).subscribe({
+          next: () => {
+            this.router.navigate(['/stations']);
+          },
+          error: (errorMessage) => {
+            this.serverError = errorMessage;
+            this.stationForm.enable();
+          }
         });
       } else {
         const stationForInsertDto: StationForInsertDto = {
@@ -126,8 +138,15 @@ export class StationsCreateUpdateComponent implements OnInit {
             longitude: this.stationForm.value.longitude,
           },
         };
-        this.stationsService.createStation(stationForInsertDto).subscribe(() => {
-          this.router.navigate(['/stations']);
+
+        this.stationsService.createStation(stationForInsertDto).subscribe({
+          next: () => {
+            this.router.navigate(['/stations']);
+          },
+          error: (errorMessage) => {
+            this.serverError = errorMessage;
+            this.stationForm.enable();
+          }
         });
       }
     }

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map, Observable, of, retry, tap} from 'rxjs';
+import {catchError, map, Observable, of, retry, tap, throwError} from 'rxjs';
 import {RouteDto} from '../../dtos/routeDto';
 import {environment} from '../../../environments/environment';
 import {RouteWithRouteStopsDto} from '../../dtos/routeWithRouteStopsDto';
@@ -15,13 +15,9 @@ export class RouteService {
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
   }
 
-  private getHeaders(): { [header: string]: string } {
-    return {
-      'Authorization': `Bearer ${this.authenticationService.getAccessToken()}`
-    };
-  }
 
   private errorHandler(error: Error | any): Observable<any> {
+    console.error(error);
     return of(null);
   }
 
@@ -36,8 +32,9 @@ export class RouteService {
   createRoute(route: RouteForInsertDto): Observable<RouteDto> {
     return this.http.post<RouteDto>(`${environment.apiUrl}/routes`, route)
       .pipe(
-        retry(3),
-        catchError(this.errorHandler)
+        catchError(error => {
+          return throwError(() => error.error?.detail || 'An error occurred while creating the route');
+        })
       );
   }
 

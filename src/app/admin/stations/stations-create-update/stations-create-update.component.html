@@ -1,4 +1,7 @@
 <div class="pt-6">
+  @if(serverError){
+    <p-message severity="error" icon="pi pi-exclamation-triangle" [text]="serverError" styleClass="w-full mb-4"></p-message>
+  }
   <p-card class="shadow-2xl">
     <form [formGroup]="stationForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">

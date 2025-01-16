@@ -1,3 +1,6 @@
+@if(serverError){
+  <p-message severity="error" icon="pi pi-exclamation-triangle" [text]="serverError" styleClass="w-full mb-4"></p-message>
+}
 <p-card class="shadow-2xl">
   <div class="border-b border-gray-200 pb-2">
     <h1 class="text-2xl font-bold">Next Departures</h1>

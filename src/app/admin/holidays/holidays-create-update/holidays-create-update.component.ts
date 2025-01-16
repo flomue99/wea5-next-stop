@@ -59,6 +59,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
   holidayForm!: FormGroup;
   holiday: HolidayDto = {name: '', type: '', fromDate: new Date(), toDate: new Date()};
   errors: { [key: string]: string } = {};
+  serverError: any = null;
 
   types: Type[] = [
     {name: 'Public Holiday', type: 'PublicHoliday'},
@@ -161,6 +162,8 @@ export class HolidayCreateUpdateComponent implements OnInit {
 
   onSubmit() {
     if (this.holidayForm.valid) {
+      this.holidayForm.disable();
+      this.serverError = null;
       //update
       if (this.isUpdatingHoliday) {
         this.holiday.id = this.id;
@@ -169,8 +172,14 @@ export class HolidayCreateUpdateComponent implements OnInit {
         this.holiday.fromDate = this.holidayForm.value.fromDate;
         this.holiday.toDate = this.holidayForm.value.toDate;
 
-        this.holidaysService.updateHoliday(this.holiday).subscribe(() => {
-          this.router.navigate(['/holidays']);
+        this.holidaysService.updateHoliday(this.holiday).subscribe({
+          next: () => {
+            this.router.navigate(['/holidays']);
+          },
+          error: (errorMessage) => {
+            this.serverError = errorMessage;
+            this.holidayForm.enable();
+          }
         });
       } else { //create
         const holidayForInsertDto = {
@@ -180,8 +189,14 @@ export class HolidayCreateUpdateComponent implements OnInit {
           toDate: this.holidayForm.value.toDate
         };
         //redirect to the created holiday with the id
-        this.holidaysService.createHoliday(holidayForInsertDto).subscribe((res: HolidayDto) => {
-          this.router.navigate(['/holidays'])
+        this.holidaysService.createHoliday(holidayForInsertDto).subscribe({
+          next: () => {
+            this.router.navigate(['/holidays'])
+          },
+          error: (errorMessage) => {
+            this.serverError = errorMessage;
+            this.holidayForm.enable();
+          }
         });
       }
     }

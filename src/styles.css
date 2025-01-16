@@ -34,6 +34,10 @@
   @apply active:bg-emerald-200 active:border-emerald-200;
 }
 
+.p-message{
+  margin-top: 6px;
+}
+
 .p-timeline-event-opposite,
 .p-timeline-event-content {
   display: none !important;

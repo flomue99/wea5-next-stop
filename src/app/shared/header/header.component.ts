@@ -39,20 +39,27 @@ export class HeaderComponent implements OnInit {
         routerLink: 'indicator-board',
       },
       {
-        label: 'Holidays',
-        icon: 'pi pi-flag',
-        routerLink: 'holidays',
-      },
-      {
-        label: 'Stations',
-        icon: 'pi pi-shop',
-        routerLink: 'stations',
-      },
-      {
-        label: 'Routes',
-        icon: 'pi pi-directions',
-        routerLink: 'routes',
-      }
-    ];
+        label: 'statistics',
+        icon: 'pi pi-chart-bar',
+        routerLink: 'statistics',
+      }];
+
+    if (this.authenticationService.isLoggedIn()) {
+      this.items.push({
+          label: 'Holidays',
+          icon: 'pi pi-flag',
+          routerLink: 'holidays',
+        },
+        {
+          label: 'Stations',
+          icon: 'pi pi-shop',
+          routerLink: 'stations',
+        },
+        {
+          label: 'Routes',
+          icon: 'pi pi-directions',
+          routerLink: 'routes',
+        });
+    }
   }
 }

@@ -18,9 +18,6 @@ import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {DestinationBoardInfoDto} from '../../../../shared/dtos/destinationBoardInfoDto';
 import {DepartureService} from '../../../../shared/services/api/departure.service';
 import {DepartureSearchFilter} from '../../../../shared/models/departure-search-filter';
-import {StationDto} from '../../../../shared/dtos/stationDto';
-import {stationValidator} from '../../../../shared/validators/stationValidators';
-import {TimeTableSearchErrorMessages} from '../../../../shared/error-messages/time-table-search-error-messages';
 
 @Component({
   selector: 'wea5-indicator-board-search',
@@ -47,10 +44,16 @@ export class IndicatorBoardSearchComponent implements OnInit {
   @Output() onDeparturesChange = new EventEmitter<DestinationBoardInfoDto[]>();
   @Output() onFromStationChange = new EventEmitter<number>();
   stations: StationWithDistanceDto[] = [];
-  selectedStation: StationWithDistanceDto = { id: 0, name: '', abbreviation: '', location: { latitude: 0, longitude: 0 }, distance: 0 };
+  selectedStation: StationWithDistanceDto = {
+    id: 0,
+    name: '',
+    abbreviation: '',
+    location: {latitude: 0, longitude: 0},
+    distance: 0
+  };
   currentUserLocation!: LocationDto;
   departures: DestinationBoardInfoDto[] = [];
-
+  serverError: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -65,9 +68,13 @@ export class IndicatorBoardSearchComponent implements OnInit {
   ngOnInit(): void {
     this.locationService.getCurrenUserLocation().then((location) => {
       this.currentUserLocation = location
-      this.stationService.getNearestStation(location).subscribe(stations => {
-        this.selectedStation = stations;
-        this.loadDepartures();
+      this.stationService.getNearestStation(location).subscribe({
+        next: station => {
+          this.selectedStation = station;
+          this.loadDepartures();
+        }, error: error => {
+          this.serverError = error;
+        }
       });
     });
   }
@@ -77,10 +84,15 @@ export class IndicatorBoardSearchComponent implements OnInit {
     const formattedDate = this.datePipe.transform(date, 'yyyy-MM-ddTHH:mm:ss') || '';
     const formattedTime = this.datePipe.transform(date, 'HH:mm:ss') || '';
 
-    this.departureService.getAllDepartures(new DepartureSearchFilter(this.selectedStation.id!, formattedDate, formattedTime)).subscribe(departures => {
-      this.departures = departures
-      this.onDeparturesChange.emit(departures);
-      this.onFromStationChange.emit(this.selectedStation.id);
+    this.departureService.getAllDepartures(new DepartureSearchFilter(this.selectedStation.id!, formattedDate, formattedTime)).subscribe({
+      next: departures => {
+        this.departures = departures;
+        this.onDeparturesChange.emit(departures);
+        this.onFromStationChange.emit(this.selectedStation.id);
+      },
+      error: error => {
+        this.serverError = error;
+      }
     });
   }
 

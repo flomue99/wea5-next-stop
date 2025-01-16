@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map, Observable, of, retry, tap} from 'rxjs';
+import {catchError, map, Observable, of, retry, tap, throwError} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {LocationDto} from '../../dtos/locationDto';
 import {StationWithDistanceDto} from '../../dtos/stationWithDistanceDto';
 import {StationDto} from '../../dtos/stationDto';
 import {StationForInsertDto} from '../../dtos/stationForInsertDto';
-import {AuthenticationService} from '../auth/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class StationService {
 
 
   private errorHandler(error: Error | any): Observable<any> {
-    return of(null);
+    return throwError(() => error);
   }
 
   getAllFilteredStations(location: LocationDto, searchString: string): Observable<StationWithDistanceDto[]> {
@@ -62,8 +61,9 @@ export class StationService {
   updateStation(station: StationDto): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/stations/${station.id}`, station)
       .pipe(
-        retry(3),
-        catchError(this.errorHandler)
+        catchError(error => {
+          return throwError(() => error.error?.detail || 'An error occurred while creating the station');
+        })
       );
 
   }
@@ -71,8 +71,9 @@ export class StationService {
   createStation(stationForInsertDto: StationForInsertDto): Observable<StationDto> {
     return this.http.post<StationDto>(`${environment.apiUrl}/stations`, stationForInsertDto)
       .pipe(
-        retry(3),
-        catchError(this.errorHandler)
+        catchError(error => {
+          return throwError(() => error.error?.detail || 'An error occurred while creating the station');
+        })
       );
   }
 }

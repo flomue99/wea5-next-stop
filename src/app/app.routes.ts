@@ -8,8 +8,8 @@ import {RoutesListComponent} from './admin/routes/routes-list/routes-list.compon
 import {IndicatorBoardComponent} from './shared/indicator-board/indicator-board.component';
 import {RoutesCreateUpdateComponent} from './admin/routes/routes-create-update/routes-create-update.component';
 import {canNavigateToAdminGuard} from '../shared/guards/can-navigate-to-admin.guard';
-import {LoginComponent} from './admin/login/login.component';
 import {LoginPageComponent} from './admin/login-page/login-page.component';
+import {StatisticsComponent} from './shared/statistics/statistics.component';
 
 export const routes: Routes = [
   {
@@ -19,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'indicator-board',
     component: IndicatorBoardComponent
+  },
+  {
+    path: 'statistics',
+    component: StatisticsComponent
   },
   {
     path: 'holidays',
