@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
       <h1 class="text-2xl font-bold">Holidays</h1>
       <p-button
-        routerLink="/holidays/create"
+        [routerLink]="'/' + NextStopRoutes.HOLIDAYS_CREATE"
         label="Add new Holiday"
         icon="pi pi-plus"
         styleClass="p-button-primary"
@@ -43,7 +43,7 @@
                 pButton
                 type="button"
                 icon="pi pi-pencil"
-                [routerLink]="['../holidays', holiday.id]"
+                [routerLink]="'/' + NextStopRoutes.HOLIDAYS + '/' + holiday.id"
                 text
                 rounded
                 severity="contrast"

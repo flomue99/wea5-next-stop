@@ -11,6 +11,7 @@ import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {Tooltip} from 'primeng/tooltip';
 import {Dialog} from 'primeng/dialog';
 import {Fieldset} from 'primeng/fieldset';
+import {NextStopRoutes} from '../../../../shared/routes.constants';
 
 @Component({
   selector: 'wea5-holidays-list',
@@ -64,4 +65,6 @@ export class HolidaysListComponent implements OnInit {
         });
     }
   }
+
+  protected readonly NextStopRoutes = NextStopRoutes;
 }

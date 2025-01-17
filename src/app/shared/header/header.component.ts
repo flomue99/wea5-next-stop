@@ -5,6 +5,7 @@ import {Menubar} from 'primeng/menubar';
 import {Button} from 'primeng/button';
 import {LoginComponent} from '../../admin/login/login.component';
 import {AuthenticationService} from '../../../shared/services/auth/authentication.service';
+import {NextStopRoutes} from '../../../shared/routes.constants';
 
 @Component({
   selector: 'wea5-header',
@@ -31,34 +32,34 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Timetable',
         icon: 'pi pi-calendar-clock',
-        routerLink: 'timetable',
+        routerLink: NextStopRoutes.TIMETABLE,
       },
       {
         label: 'Departure Board',
         icon: 'pi pi-map',
-        routerLink: 'indicator-board',
+        routerLink: NextStopRoutes.INDICATOR_BOARD,
       },
       {
         label: 'statistics',
         icon: 'pi pi-chart-bar',
-        routerLink: 'statistics',
+        routerLink: NextStopRoutes.STATISTICS,
       }];
 
     if (this.authenticationService.isLoggedIn()) {
       this.items.push({
           label: 'Holidays',
           icon: 'pi pi-flag',
-          routerLink: 'holidays',
+          routerLink: NextStopRoutes.HOLIDAYS,
         },
         {
           label: 'Stations',
           icon: 'pi pi-shop',
-          routerLink: 'stations',
+          routerLink: NextStopRoutes.STATIONS,
         },
         {
           label: 'Routes',
           icon: 'pi pi-directions',
-          routerLink: 'routes',
+          routerLink: NextStopRoutes.ROUTES,
         });
     }
   }

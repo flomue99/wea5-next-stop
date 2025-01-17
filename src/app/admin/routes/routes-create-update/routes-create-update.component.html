@@ -1,6 +1,7 @@
 <div class="pt-6">
-  @if(serverError){
-    <p-message severity="error" icon="pi pi-exclamation-triangle" [text]="serverError" styleClass="w-full mb-4"></p-message>
+  @if (serverError) {
+    <p-message severity="error" icon="pi pi-exclamation-triangle" [text]="serverError"
+               styleClass="w-full mb-4"></p-message>
   }
   <p-card class="shadow-2xl">
     <form class="space-y-4" [formGroup]="routeForm">
@@ -224,7 +225,7 @@
 
     <div class="flex justify-end items-center space-x-4 pt-3 border-t border-gray-200">
       <p-button
-        routerLink="/routes"
+        [routerLink]="'/'+NextStopRoutes.ROUTES"
         label="Cancel"
         icon="pi pi-times"
         styleClass="p-button-secondary"

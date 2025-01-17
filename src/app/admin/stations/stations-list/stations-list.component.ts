@@ -12,6 +12,7 @@ import {StationWithDistanceDto} from '../../../../shared/dtos/stationWithDistanc
 import {StationService} from '../../../../shared/services/api/station.service';
 import {StationDto} from '../../../../shared/dtos/stationDto';
 import {HolidayDto} from '../../../../shared/dtos/holidayDto';
+import {NextStopRoutes} from "../../../../shared/routes.constants";
 
 @Component({
   selector: 'wea5-stations-list',
@@ -43,4 +44,6 @@ export class StationsListComponent implements OnInit {
         this.stations = stations;
       });
   }
+
+    protected readonly NextStopRoutes = NextStopRoutes;
 }

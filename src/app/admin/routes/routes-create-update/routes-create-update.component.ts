@@ -32,6 +32,7 @@ import {
 import {AddUpdateHolidayErrorMessages} from '../../../../shared/error-messages/add-update-holiday-error-messages';
 import {Message} from 'primeng/message';
 import {AddUpdateRouteErrorMessages} from '../../../../shared/error-messages/add-update-route-error-messages';
+import {NextStopRoutes} from '../../../../shared/routes.constants';
 
 @Component({
   selector: 'wea5-routes-create',
@@ -282,7 +283,7 @@ export class RoutesCreateUpdateComponent implements OnInit {
 
         this.routesService.createRoute(routeForInsertDto).subscribe({
             next: () => {
-              this.router.navigate(['/routes']);
+              this.router.navigate(['/' + NextStopRoutes.ROUTES]);
             },
             error: (errorMessage) => {
               this.serverError = errorMessage;
@@ -305,4 +306,6 @@ export class RoutesCreateUpdateComponent implements OnInit {
     });
 
   }
+
+  protected readonly NextStopRoutes = NextStopRoutes;
 }

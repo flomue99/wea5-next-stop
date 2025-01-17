@@ -9,6 +9,7 @@ import {TableModule} from 'primeng/table';
 import {Tooltip} from 'primeng/tooltip';
 import {DatePipe, NgIf} from '@angular/common';
 import {Tag} from 'primeng/tag';
+import {NextStopRoutes} from "../../../../shared/routes.constants";
 
 @Component({
   selector: 'wea5-routes-list',
@@ -41,4 +42,6 @@ export class RoutesListComponent implements OnInit {
         this.routes = routes;
       });
   }
+
+    protected readonly NextStopRoutes = NextStopRoutes;
 }

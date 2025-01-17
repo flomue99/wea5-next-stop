@@ -23,6 +23,7 @@ import {
   fromDateMustBeforeToDate
 } from '../../../../shared/validators/holidayValidators';
 import {Message} from 'primeng/message';
+import {NextStopRoutes} from '../../../../shared/routes.constants';
 
 interface Type {
   name: string;
@@ -174,7 +175,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
 
         this.holidaysService.updateHoliday(this.holiday).subscribe({
           next: () => {
-            this.router.navigate(['/holidays']);
+            this.router.navigate(['/' + NextStopRoutes.HOLIDAYS]);
           },
           error: (errorMessage) => {
             this.serverError = errorMessage;
@@ -191,7 +192,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
         //redirect to the created holiday with the id
         this.holidaysService.createHoliday(holidayForInsertDto).subscribe({
           next: () => {
-            this.router.navigate(['/holidays'])
+            this.router.navigate(['/' + NextStopRoutes.HOLIDAYS]);
           },
           error: (errorMessage) => {
             this.serverError = errorMessage;
@@ -201,4 +202,6 @@ export class HolidayCreateUpdateComponent implements OnInit {
       }
     }
   }
+
+  protected readonly NextStopRoutes = NextStopRoutes;
 }

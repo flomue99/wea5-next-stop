@@ -10,72 +10,73 @@ import {RoutesCreateUpdateComponent} from './admin/routes/routes-create-update/r
 import {canNavigateToAdminGuard} from '../shared/guards/can-navigate-to-admin.guard';
 import {LoginPageComponent} from './admin/login-page/login-page.component';
 import {StatisticsComponent} from './shared/statistics/statistics.component';
+import {NextStopRoutes} from '../shared/routes.constants';
 
 export const routes: Routes = [
   {
-    path: 'timetable',
+    path: NextStopRoutes.TIMETABLE,
     component: TimeTableComponent
   },
   {
-    path: 'indicator-board',
+    path: NextStopRoutes.INDICATOR_BOARD,
     component: IndicatorBoardComponent
   },
   {
-    path: 'statistics',
+    path: NextStopRoutes.STATISTICS,
     component: StatisticsComponent
   },
   {
-    path: 'holidays',
+    path: NextStopRoutes.HOLIDAYS,
     component: HolidaysListComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'holidays/create',
+    path: NextStopRoutes.HOLIDAYS_CREATE,
     component: HolidayCreateUpdateComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'holidays/:id',
+    path: NextStopRoutes.HOLIDAYS_EDIT,
     component: HolidayCreateUpdateComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'stations',
+    path: NextStopRoutes.STATIONS,
     component: StationsListComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'stations/create',
+    path: NextStopRoutes.STATIONS_CREATE,
     component: StationsCreateUpdateComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'stations/:id',
+    path: NextStopRoutes.STATIONS_EDIT,
     component: StationsCreateUpdateComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'routes',
+    path: NextStopRoutes.ROUTES,
     component: RoutesListComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'routes/create',
+    path: NextStopRoutes.ROUTES_CREATE,
     component: RoutesCreateUpdateComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'routes/:id',
+    path: NextStopRoutes.ROUTES_EDIT,
     component: RoutesCreateUpdateComponent,
     canActivate: [canNavigateToAdminGuard]
   },
   {
-    path: 'login',
+    path: NextStopRoutes.LOGIN,
     component: LoginPageComponent
   },
   {
-    path: '',
-    redirectTo: '/timetable',
+    path: NextStopRoutes.HOME,
+    redirectTo: `/${NextStopRoutes.TIMETABLE}`,
     pathMatch: 'full'
   }
 ];

@@ -17,6 +17,7 @@ import {
 } from '../../../../shared/error-messages/add-update-station-error-messages';
 import {Message} from 'primeng/message';
 import {NgIf} from '@angular/common';
+import {NextStopRoutes} from '../../../../shared/routes.constants';
 
 @Component({
   selector: 'wea5-stations-create-update',
@@ -122,7 +123,7 @@ export class StationsCreateUpdateComponent implements OnInit {
         }
         this.stationsService.updateStation(this.station).subscribe({
           next: () => {
-            this.router.navigate(['/stations']);
+            this.router.navigate(['/' + NextStopRoutes.STATIONS]);
           },
           error: (errorMessage) => {
             this.serverError = errorMessage;
@@ -141,7 +142,7 @@ export class StationsCreateUpdateComponent implements OnInit {
 
         this.stationsService.createStation(stationForInsertDto).subscribe({
           next: () => {
-            this.router.navigate(['/stations']);
+            this.router.navigate(['/' + NextStopRoutes.STATIONS]);
           },
           error: (errorMessage) => {
             this.serverError = errorMessage;
@@ -151,4 +152,6 @@ export class StationsCreateUpdateComponent implements OnInit {
       }
     }
   }
+
+  protected readonly NextStopRoutes = NextStopRoutes;
 }

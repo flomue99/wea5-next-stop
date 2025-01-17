@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between p-0 border-b border-gray-200 pb-2">
       <h1 class="text-2xl font-bold">Stations</h1>
       <p-button
-        routerLink="/stations/create"
+        [routerLink]="'/'+NextStopRoutes.STATIONS_CREATE"
         label="Add new Station"
         icon="pi pi-plus"
         styleClass="p-button-primary"
@@ -31,7 +31,7 @@
           <td class="pt-0 pb-0">{{ station.id }}</td>
           <td class="pt-0 pb-0">{{ station.name }}</td>
           <td class="pt-0 pb-0">{{ station.abbreviation }}</td>
-          <td class="pt-0 pb-0">({{ station.location.latitude }}, {{station.location.longitude}})</td>
+          <td class="pt-0 pb-0">({{ station.location.latitude }}, {{ station.location.longitude }})</td>
           <td class="pt-0 pb-0">
             <div class="flex items-center justify-center gap-2">
               <button
@@ -41,7 +41,7 @@
                 pButton
                 type="button"
                 icon="pi pi-pencil"
-                [routerLink]="['../stations', station.id]"
+                [routerLink]="'/' + NextStopRoutes.STATIONS +'/'+ station.id"
                 text
                 rounded
                 severity="contrast"
