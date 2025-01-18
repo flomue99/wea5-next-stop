@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map, Observable, of, retry, tap, throwError} from 'rxjs';
+import {catchError, map, Observable, of, retry, throwError} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {HolidayDto} from '../../dtos/holidayDto';
 import {HolidayForInsertDto} from '../../dtos/holidayForInsertDto';
@@ -14,6 +14,7 @@ export class HolidayService {
   }
 
   private errorHandler(error: Error | any): Observable<any> {
+    console.error('An error occurred', error);
     return of(null);
   }
 
@@ -45,6 +46,7 @@ export class HolidayService {
   createHoliday(holiday: HolidayForInsertDto): Observable<HolidayDto> {
     return this.http.post<HolidayDto>(`${environment.apiUrl}/holidays`, holiday)
       .pipe(
+        retry(2),
         catchError(error => {
           return throwError(() => error.error?.detail || 'An error occurred while creating the holiday');
         })
@@ -54,6 +56,7 @@ export class HolidayService {
   updateHoliday(holiday: HolidayDto): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/holidays/${holiday.id}`, holiday)
       .pipe(
+        retry(2),
         catchError(error => {
           return throwError(() => error.error?.detail || 'An error occurred while updating the holiday');
         })

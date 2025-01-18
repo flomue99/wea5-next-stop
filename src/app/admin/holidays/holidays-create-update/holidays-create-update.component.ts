@@ -12,10 +12,8 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {InputText} from 'primeng/inputtext';
 import {Select} from 'primeng/select';
 import {HolidayService} from '../../../../shared/services/api/holiday.service';
-import {HolidayForInsertDto} from '../../../../shared/dtos/holidayForInsertDto';
 import {HolidayDto} from '../../../../shared/dtos/holidayDto';
 import {InputNumber} from 'primeng/inputnumber';
-import {TimeTableSearchErrorMessages} from '../../../../shared/error-messages/time-table-search-error-messages';
 import {AddUpdateHolidayErrorMessages} from '../../../../shared/error-messages/add-update-holiday-error-messages';
 import {
   datesMustBeSame,
@@ -163,7 +161,6 @@ export class HolidayCreateUpdateComponent implements OnInit {
 
   onSubmit() {
     if (this.holidayForm.valid) {
-      this.holidayForm.disable();
       this.serverError = null;
       //update
       if (this.isUpdatingHoliday) {
@@ -173,6 +170,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
         this.holiday.fromDate = this.holidayForm.value.fromDate;
         this.holiday.toDate = this.holidayForm.value.toDate;
 
+        this.holidayForm.disable();
         this.holidaysService.updateHoliday(this.holiday).subscribe({
           next: () => {
             this.router.navigate(['/' + NextStopRoutes.HOLIDAYS]);
@@ -190,6 +188,7 @@ export class HolidayCreateUpdateComponent implements OnInit {
           toDate: this.holidayForm.value.toDate
         };
         //redirect to the created holiday with the id
+        this.holidayForm.disable();
         this.holidaysService.createHoliday(holidayForInsertDto).subscribe({
           next: () => {
             this.router.navigate(['/' + NextStopRoutes.HOLIDAYS]);

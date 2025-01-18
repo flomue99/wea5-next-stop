@@ -1,1 +1,89 @@
-<p>statistics works!</p>
+<div class="pt-6">
+  @if (serverError) {
+    <p-message severity="error" icon="pi pi-exclamation-triangle" [text]="serverError"
+               styleClass="w-full mb-4"></p-message>
+  }
+  <p-card class="shadow-2xl">
+    <div class="border-b border-gray-200 pb-2">
+      <h1 class="text-2xl font-bold">Statistics</h1>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="statisticsForm">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
+        <div class="space-y-4 md:col-span-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div class="relative">
+              <p-float-label variant="on" class="w-full">
+                <p-select
+                  formControlName="routeNumber"
+                  [options]="distinctRouteNumbers"
+                  inputId="route"
+                  styleClass="w-full"
+                >
+                </p-select>
+                <label for="route" class="text-gray-600">Route Number</label>
+              </p-float-label>
+            </div>
+            <div class="relative">
+              <p-float-label variant="on" class="w-full">
+                <p-datepicker
+                  [showIcon]="true"
+                  formControlName="dateFrom"
+                  inputId="fromDateLabel"
+                  styleClass="w-full"
+                  [inputStyleClass]="'w-full'"
+                ></p-datepicker>
+                <label for="fromDateLabel" class="text-gray-600">From Date</label>
+              </p-float-label>
+              @if (errors['dateFrom']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['dateFrom'] }}"
+                ></p-message>
+              }
+            </div>
+
+            <div class="relative">
+              <p-float-label variant="on" class="w-full">
+                <p-datepicker
+                  [showIcon]="true"
+                  formControlName="dateTo"
+                  inputId="toDate"
+                  styleClass="w-full"
+                  [inputStyleClass]="'w-full'"
+                >
+                </p-datepicker>
+                <label for="toDate" class="text-gray-600">
+                  To Date
+                </label>
+              </p-float-label>
+              @if (errors['dateTo']) {
+                <p-message
+                  severity="error"
+                  text="{{ errors['dateTo'] }}"
+                ></p-message>
+              }
+            </div>
+          </div>
+          @if (errors['formError']) {
+            <p-message
+              severity="error"
+              text="{{ errors['formError'] }}"
+            ></p-message>
+          }
+          <div class="flex justify-end items-center border-t border-gray-200">
+            <div class="pt-2">
+              <p-button
+                label="Get Statistics"
+                type="submit"
+                icon="pi pi-search"
+                styleClass="p-button-primary"
+                [disabled]="statisticsForm.invalid"
+              ></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
+<p-chart [width]="'1000'" type="bar" [data]="barCharData" [options]="barChartOptions"/>
