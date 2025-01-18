@@ -111,6 +111,7 @@ export class StatisticsComponent implements OnInit {
     if (this.statisticsForm.errors?.['fromDateMustBeBeforeToDate']) {
       this.errors['formError'] = 'From date must be before To date.';
     }
+
     for (const message of StatisticErrorMessages) {
       if (this.statisticsForm.get(message.forControl)?.errors?.[message.forValidator]) {
         this.errors[message.forControl] = message.text;

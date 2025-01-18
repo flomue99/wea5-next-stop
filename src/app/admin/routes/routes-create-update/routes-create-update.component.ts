@@ -260,7 +260,7 @@ export class RoutesCreateUpdateComponent implements OnInit {
           return {
             stationId: routeStop.stationId,
             stationOrder: routeStop.stationOrder,
-            departureTime: this.datePipe.transform(routeStop.departureTime, 'HH:mm') || ''
+            departureTime: this.datePipe.transform(routeStop.departureTime, 'HH:mm:ss') || ''
           };
         });
 

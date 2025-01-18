@@ -14,8 +14,5 @@ import {authConfig} from '../shared/configs/auth.config';
 export class AppComponent {
   title = 'next-stop';
 
-  constructor(private oauthService: OAuthService) {
-  }
-
 }
 
